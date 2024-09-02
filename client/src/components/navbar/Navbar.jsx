@@ -83,9 +83,9 @@ function Navbar() {
   if (currentUser) fetch();
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-black h-16 relative z-50">
+    <nav className="bg-white border-gray-200 dark:bg-black h-14 relative z-50">
       <div className="w-full flex flex-wrap items-center justify-between p-2">
-        <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           {/* <img src="" className="h-8" alt="Logo" /> */}
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             House Hunt
@@ -243,7 +243,7 @@ function Navbar() {
             id="theme-toggle"
             type="button"
             onClick={toggleDarkMode}
-            className="text-gray-500 dark:text-gray-400 lg:hover:bg-gray-200 lg:dark:hover:bg-gray-700 rounded-lg p-1"
+            className="text-gray-500 dark:text-gray-400 lg:hover:bg-gray-200 lg:dark:hover:bg-gray-700 rounded-lg"
           >
             <svg
               id="theme-toggle-dark-icon"
