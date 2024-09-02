@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-color-light: #ffffff; /* Light mode background color */
+  --bg-color-dark: #000000;  /* Dark mode background color */
+}
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  overflow: hidden;
+  background-color: var(--bg-color-light);
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode {
+  background-color: var(--bg-color-dark);
+}

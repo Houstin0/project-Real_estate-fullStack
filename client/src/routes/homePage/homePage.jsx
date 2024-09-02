@@ -1,44 +1,39 @@
 import { useContext } from "react";
 import SearchBar from "../../components/searchBar/SearchBar";
-import "./homePage.scss";
 import { AuthContext } from "../../context/AuthContext";
 
 function HomePage() {
-
-  const {currentUser} = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext);
 
   return (
-    <div className="homePage">
-      <div className="textContainer">
-        <div className="wrapper">
-          <h1 className="title">Find Real Estate & Get Your Dream Place</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-            explicabo suscipit cum eius, iure est nulla animi consequatur
-            facilis id pariatur fugit quos laudantium temporibus dolor ea
-            repellat provident impedit!
-          </p>
-          <SearchBar />
-          <div className="boxes">
-            <div className="box">
-              <h1>16+</h1>
-              <h2>Years of Experience</h2>
-            </div>
-            <div className="box">
-              <h1>200</h1>
-              <h2>Award Gained</h2>
-            </div>
-            <div className="box">
-              <h1>2000+</h1>
-              <h2>Property Ready</h2>
-            </div>
+    <section className="bg-center bg-no-repeat bg-[url('https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg')] bg-gray-700 bg-blend-multiply">
+      <div className="relative px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56 top-[-150px]">
+        <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
+          Your Go-To Website for House Hunting
+        </h1>
+        <p className="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">
+          Find your dream home effortlessly. Whether you&apos;re looking to rent
+          or buy, our platform offers a seamless way to discover the best
+          properties tailored to your needs. Start your search now and take the
+          first step toward your perfect home.
+        </p>
+        <SearchBar />
+        {/* <div className="flex justify-between space-x-4 sm:flex mt-4">
+          <div className="text-center text-white ">
+            <h1 className="text-4xl lg:text-3xl font-bold">16+</h1>
+            <h2 className="text-xl font-light">Years of Experience</h2>
           </div>
-        </div>
+          <div className="text-center text-white">
+            <h1 className="text-4xl lg:text-3xl font-bold">200</h1>
+            <h2 className="text-xl font-light">Award Gained</h2>
+          </div>
+          <div className="text-center text-white">
+            <h1 className="text-4xl lg:text-3xl font-bold">2000+</h1>
+            <h2 className="text-xl font-light">Property Ready</h2>
+          </div>
+        </div> */}
       </div>
-      <div className="imgContainer">
-        <img src="/bg.png" alt="" />
-      </div>
-    </div>
+    </section>
   );
 }
 
