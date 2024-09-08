@@ -7,6 +7,8 @@ import testRoute from "./routes/test.route.js";
 import userRoute from "./routes/user.route.js";
 import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 
@@ -36,6 +38,18 @@ app.use("/api/test", testRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
 
-app.listen(8800, () => {
-  console.log("Server is running!");
+
+// Get the directory name
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+
+const PORT = 8800;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
