@@ -4,7 +4,8 @@
 
   .formContainer {
     flex: 3;
-    overflow: scroll;
+    max-height: 80vh; // Set a maximum height
+    overflow-y: auto;
 
     .wrapper {
       margin: 30px 50px 100px 0px;
