@@ -4,6 +4,28 @@ import apiRequest from "../../lib/apiRequest";
 import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
 import { Suspense, useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import Map from "../../components/map/Map";
+
+const customData = [
+  {
+    id: '1',
+    title: 'Custom House 1',
+    price: 5000,
+    images: [],
+    address: 'Custom Location 1',
+    latitude: -1.2832533,
+    longitude: 36.8172449,
+  },
+  {
+    id: '2',
+    title: 'Custom House 2',
+    price: 12000,
+    images: [],
+    address: 'Custom Location 2',
+    latitude: -1.2920659,
+    longitude: 36.8219462,
+  }
+];
 
 function ProfilePage() {
   const data = useLoaderData();
@@ -71,6 +93,8 @@ function ProfilePage() {
                 Create Post
               </a>
 
+
+              <Map items={customData} />
 
 
 

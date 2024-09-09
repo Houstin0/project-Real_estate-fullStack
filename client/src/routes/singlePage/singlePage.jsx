@@ -1,3 +1,118 @@
+// import "./singlePage.scss";
+// import Slider from "../../components/slider/Slider";
+// import Map from "../../components/map/Map";
+// import { useNavigate, useLoaderData } from "react-router-dom";
+// import DOMPurify from "dompurify";
+// import { useContext, useState } from "react";
+// import { AuthContext } from "../../context/AuthContext";
+// import apiRequest from "../../lib/apiRequest";
+
+// function SinglePage() {
+//   const post = useLoaderData();
+//   const [saved, setSaved] = useState(post.isSaved);
+//   const { currentUser } = useContext(AuthContext);
+//   const navigate = useNavigate();
+
+//   const handleSave = async () => {
+//     if (!currentUser) {
+//       navigate("/login");
+//     }
+//     // AFTER REACT 19 UPDATE TO USEOPTIMISTIK HOOK
+//     setSaved((prev) => !prev);
+//     try {
+//       await apiRequest.post("/users/save", { postId: post.id });
+//     } catch (err) {
+//       console.log(err);
+//       setSaved((prev) => !prev);
+//     }
+//   };
+
+//   return (
+//     <div className="relative h-screen overflow-y-auto">
+//       <div className="w-full bg-white p-16 dark:bg-black">
+//         <div className="flex flex-col md:flex-row items-center md:items-start pb-10 px-5">
+//           {/* Avatar */}
+//           <img
+//             className="w-48 h-48 mb-3 md:mb-0 rounded-full shadow-lg"
+//             src={currentUser.avatar || "noavatar.jpg"}
+//             alt={currentUser.username}
+//           />
+
+//           {/* Text and Buttons */}
+//           <div className="md:ml-6 text-center md:text-left">
+//             <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+//               {currentUser.username}
+//             </h5>
+//             <span className="text-sm text-gray-500 dark:text-gray-400">
+//               {currentUser.email}
+//             </span>
+
+//             <div className="flex justify-center md:justify-start mt-4 md:mt-6">
+//               <a
+//                 href="/profile/update"
+//                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+//               >
+//                 Edit Profile
+//               </a>
+//               <button
+                
+//                 className="py-2 px-4 ms-2 text-sm font-medium text-white focus:outline-none bg-red-600 rounded-lg border border-gray-200 hover:bg-red-500 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+//               >
+//                 Log Out
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       <a
+//                 href="/add"
+//                 className="py-2 px-4 ms-2 text-sm font-medium text-white focus:outline-none bg-blue-600 rounded-lg border border-gray-200 hover:bg-blue-500 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+//               >
+//                 Create Post
+//               </a>
+
+
+
+
+
+
+// <div class="grid grid-cols-2 md:grid-cols-2 gap-4 p-20">
+
+
+// </div>
+
+
+
+
+ 
+//     </div>
+//   );
+// }
+
+// export default SinglePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";

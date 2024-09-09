@@ -1,5 +1,4 @@
 import { MapContainer, TileLayer } from "react-leaflet";
-import "./map.scss";
 import "leaflet/dist/leaflet.css";
 import Pin from "../pin/Pin";
 
@@ -13,7 +12,7 @@ function Map({ items }) {
       }
       zoom={10}
       scrollWheelZoom={false}
-      className="map"
+      style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
