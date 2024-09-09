@@ -24,3 +24,22 @@ body {
 body.dark-mode {
   background-color: var(--bg-color-dark);
 }
+
+
+::-webkit-scrollbar {
+  width: 8px; /* width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #9e9c9c; /* color of the scrollbar */
+  border-radius: 4px; /* roundness of the scrollbar thumb */
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #646363; /* color of the scrollbar on hover */
+}
