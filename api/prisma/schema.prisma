@@ -20,8 +20,8 @@ model Post {
   images     String[]
   address    String
   city       String
-  bedroom    Int
-  bathroom   Int
+  bedroom    Int?
+  bathroom   Int?
   latitude   String
   longitude  String
   type       Type
@@ -43,7 +43,10 @@ enum Property {
   house
   condo
   land
+  commercial
+  villa
 }
+
 
 model PostDetail {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -70,6 +73,11 @@ model SavedPost {
   @@unique([userId, postId])
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model User {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
   email      String      @unique
@@ -81,6 +89,8 @@ model User {
   savedPosts SavedPost[]
   chats      Chat[]      @relation(fields: [chatIDs], references: [id])
   chatIDs    String[]    @db.ObjectId
+
+  role       Role        @default(USER)
 }
 
 model Chat {

@@ -4,6 +4,8 @@ import ListPage from "./routes/listPage/listPage";
 import { Layout, RequireAuth } from "./routes/layout/layout";
 import SinglePage from "./routes/singlePage/singlePage";
 import ProfilePage from "./routes/profilePage/profilePage";
+import AdminProfilePage from "./routes/profilePage/adminProfilePage";
+import UserProfilePage from "./routes/profilePage/userProfilePage";
 import Login from "./routes/login/login";
 import Register from "./routes/register/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
@@ -48,6 +50,16 @@ function App() {
         {
           path: "/profile",
           element: <ProfilePage />,
+          loader: profilePageLoader
+        },
+        {
+          path: "/profile/admin",
+          element: <AdminProfilePage />,
+          loader: profilePageLoader
+        },
+        {
+          path: "/profile/user",
+          element: <UserProfilePage />,
           loader: profilePageLoader
         },
         {
