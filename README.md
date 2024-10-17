@@ -1,3 +1,13 @@
+npx prisma db push
+
+nodemon app.js
+
+npm run dev
+
+
+
+
+
 # Company Profile Website (Netwoods)
 <!-- ![Project Banner](https://yourcompanybanner.com/banner.png) -->
 ---
@@ -72,6 +82,7 @@ Running the Project
 
 ```bash
 npm run dev
+nodemon app.js
 Open http://localhost:3000 in your browser to view the project.
 ```
 

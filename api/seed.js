@@ -1,5 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables from .env file
+
 
 const prisma = new PrismaClient();
 
@@ -62,7 +66,7 @@ async function main() {
     {
       title: 'Modern Apartment in Westlands',
       price: 50000,
-      images: ['http://localhost:8800/uploads/westlands_apartment.jpg'],
+      images: ['http://localhost:8800/uploads/house_inside3.jpg'],
       address: 'Westlands, Nairobi',
       city: 'Nairobi',
       bedroom: 3,

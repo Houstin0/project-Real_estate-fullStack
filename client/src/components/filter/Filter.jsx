@@ -31,7 +31,7 @@ function Filter() {
       <div className="flex flex-wrap gap-6">
         {/* Location Input */}
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="city" className="text-xs">Location</label>
+          <label htmlFor="city" className="text-xs text-black dark:text-white">Location</label>
           <input
             type="text"
             id="city"
@@ -45,7 +45,7 @@ function Filter() {
 
         {/* Type Dropdown */}
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="type" className="text-xs">Type</label>
+          <label htmlFor="type" className="text-xs text-black dark:text-white">Type</label>
           <select
             name="type"
             id="type"
@@ -62,7 +62,7 @@ function Filter() {
 
 
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="property" className="text-xs">Property</label>
+          <label htmlFor="property" className="text-xs text-black dark:text-white">Property</label>
           <select
             name="property"
             id="property"
@@ -85,7 +85,7 @@ function Filter() {
        
 
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="minPrice" className="text-xs">Min Price</label>
+          <label htmlFor="minPrice" className="text-xs text-black dark:text-white">Min Price</label>
           <input
             type="number"
             id="minPrice"
@@ -97,7 +97,7 @@ function Filter() {
           />
         </div>
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="maxPrice" className="text-xs">Max Price</label>
+          <label htmlFor="maxPrice" className="text-xs text-black dark:text-white">Max Price</label>
           <input
             type="text"
             id="maxPrice"
@@ -109,7 +109,7 @@ function Filter() {
           />
         </div>
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="bedroom" className="text-xs">Bedroom</label>
+          <label htmlFor="bedroom" className="text-xs text-black dark:text-white">Bedroom</label>
           <input
             type="text"
             id="bedroom"

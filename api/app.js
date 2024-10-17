@@ -9,6 +9,9 @@ import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv'; // Import dotenv
+
+dotenv.config(); // Load environment variables from .env
 
 const app = express();
 
@@ -23,21 +26,24 @@ app.use(cors({
   },
   credentials: true,
 }));
+
 app.use(express.json());
+
+// Use session middleware with secret from .env
 app.use(session({
-  secret: process.env.JWT_SECRET_KEY,
+  secret: process.env.JWT_SECRET_KEY,  // Use SESSION_SECRET from .env
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
 
+// Routes
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/test", testRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
-
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -46,9 +52,8 @@ const __dirname = path.dirname(__filename);
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-
-const PORT = 8800;
+// Use PORT from .env, fallback to 8800 if not specified
+const PORT = process.env.PORT || 8800;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
