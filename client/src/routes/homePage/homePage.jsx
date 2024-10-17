@@ -7,7 +7,7 @@ function HomePage() {
   const { currentUser } = useContext(AuthContext);
 
   return (
-    <section className="bg-center bg-no-repeat bg-[url('https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg')] bg-gray-700 bg-blend-multiply ">
+<section className="h-screen bg-center bg-no-repeat bg-cover bg-[url('/background.jpg')] bg-blend-multiply">
       <div className="relative px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56 top-[-150px]">
         <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-white">
           Your Go-To Website for{" "}

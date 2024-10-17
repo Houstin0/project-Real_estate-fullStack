@@ -25,14 +25,14 @@ function Register() {
       return;
     }
 
-    // const role = "ADMIN"
+    const role = "USER"
 
     try {
       const res = await apiRequest.post("/auth/register", {
         username,
         email,
         password,
-        // role
+        role
       });
 
       console.log(res);

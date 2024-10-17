@@ -2,7 +2,7 @@ import Card from "../card/Card";
 
 function List({ posts }) {
   return (
-    <div className="mt-4 md:mt-0 md:mx-8 w-full max-w-7xl p-4 overflow-y-auto md:h-[520px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="mt-4 md:mt-0 w-full max-w-7xl p-4 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="flex items-center justify-between mb-4">
       <a
           href="/add"
