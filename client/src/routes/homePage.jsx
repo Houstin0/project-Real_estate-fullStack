@@ -1,10 +1,10 @@
-import Filter from "../../components/filter/Filter";
-import Card from "../../components/card/Card";
-import Map from "../../components/map/Map";
+import Filter from "../components/filter/Filter";
+import Card from "../components/card/Card";
+import Map from "../components/map/Map";
 import { Await, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 
-function ListPage() {
+function HomePage() {
   const data = useLoaderData();
 
   return (
@@ -21,8 +21,9 @@ function ListPage() {
       </div>
 
       <div className="flex-3 h-full w-1/2">
-        <div className="h-full flex flex-col gap-4 overflow-y-auto pb-20">
-          <Filter />
+      <Filter />
+        <div className="h-[390px] flex flex-col gap-4 overflow-y-auto pb-10">
+         
           <Suspense fallback={<p>Loading...</p>}>
             <Await
               resolve={data.postResponse}
@@ -41,4 +42,4 @@ function ListPage() {
   );
 }
 
-export default ListPage;
+export default HomePage;

@@ -24,7 +24,7 @@ function Filter() {
   };
 
   return (
-    <div className="flex flex-col gap-2.5 px-10">
+    <div className="flex flex-col gap-2.5 px-10 pb-4">
       {/* <h1 className="font-light text-xl justify-center flex">
         Search results for <b className="mx-2">{searchParams.get("city")}</b>
       </h1> */}
@@ -124,7 +124,7 @@ function Filter() {
           onClick={handleFilter}
           className="w-24 h-auto mt-4 p-2 bg-blue-600 text-white border border-transparent rounded-md cursor-pointer"
         >
-          Filter
+          Search
         </button>
       </div>
     </div>
