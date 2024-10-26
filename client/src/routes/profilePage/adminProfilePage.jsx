@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { useNavigate, Await, Link, useLoaderData } from "react-router-dom";
 import List from "../../components/list/List";
-import Chat from "../../components/chat/Chat";
+
 
 function AdminProfilePage() {
   const { currentUser, updateUser } = useContext(AuthContext);

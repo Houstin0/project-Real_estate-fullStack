@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
+import { format } from "timeago.js";
 
 export default function Inbox() {
   const { currentUser } = useContext(AuthContext);
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [selectedConversation, setSelectedConversation] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState(null);
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -20,19 +21,39 @@ export default function Inbox() {
     fetchConversations();
   }, []);
 
-  const loadMessages = async (conversation) => {
-    try {
-      const { data } = await apiRequest.get(
-        `/chats/messages/${conversation.id}`
-      );
-      setMessages(data);
-      setSelectedConversation(conversation);
-    } catch (error) {
-      console.error("Error loading messages", error);
+  // Load selected conversation from localStorage on component mount
+  useEffect(() => {
+    const storedConversationId = localStorage.getItem("selectedConversationId");
+    if (storedConversationId) {
+      const conversation = conversations.find(conv => conv.id === storedConversationId);
+      if (conversation) {
+        loadMessages(conversation);
+      }
     }
-  };
+  }, [conversations]);
 
- 
+    const loadMessages = async (conversation) => {
+      try {
+        const { data } = await apiRequest.get(`/chats/messages/${conversation.id}`);
+        setMessages(data);
+        setSelectedConversation(conversation);
+        localStorage.setItem("selectedConversationId", conversation.id); // Save selected conversation ID to localStorage
+      } catch (error) {
+        console.error("Error loading messages", error);
+      }
+    };
+  
+    const handleConversationClick = (conv) => {
+      loadMessages(conv);
+    };
+
+      // Reset selectedConversation to null if the pathname is not /inbox
+  useEffect(() => {
+    if (location.pathname !== "/inbox") {
+      setSelectedConversation(null);
+      localStorage.removeItem("selectedConversationId"); // Clear from localStorage
+    }
+  }, [location.pathname]);
 
   // Define friend based on selectedConversation and ensure friend is not undefined
   const friend =
@@ -44,26 +65,24 @@ export default function Inbox() {
       : selectedConversation.user1);
   // console.log(friend);
 
+  // Function to format the createdAt timestamp
+  // const formatDate = (date) => {
+  //   const now = new Date();
+  //   const messageDate = new Date(date);
+  //   const diffInSeconds = Math.floor((now - messageDate) / 1000);
+  //   const diffInMinutes = Math.floor(diffInSeconds / 60);
+  //   const diffInHours = Math.floor(diffInMinutes / 60);
 
-
-    // Function to format the createdAt timestamp
-    const formatDate = (date) => {
-      const now = new Date();
-      const messageDate = new Date(date);
-      const diffInSeconds = Math.floor((now - messageDate) / 1000);
-      const diffInMinutes = Math.floor(diffInSeconds / 60);
-      const diffInHours = Math.floor(diffInMinutes / 60);
-  
-      if (diffInSeconds < 60) {
-        return "Just now";
-      } else if (diffInMinutes < 60) {
-        return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
-      } else if (diffInHours < 24) {
-        return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-      } else {
-        return messageDate.toLocaleDateString(); // Adjust to your desired date format
-      }
-    };
+  //   if (diffInSeconds < 60) {
+  //     return "Just now";
+  //   } else if (diffInMinutes < 60) {
+  //     return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+  //   } else if (diffInHours < 24) {
+  //     return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+  //   } else {
+  //     return messageDate.toLocaleDateString(); // Adjust to your desired date format
+  //   }
+  // };
 
   return (
     <div className="flex h-screen">
@@ -90,7 +109,7 @@ export default function Inbox() {
                   <li
                     key={conv.id}
                     className="p-1 cursor-pointer hover:bg-gray-300 rounded-lg"
-                    onClick={() => loadMessages(conv)}
+                    onClick={() => handleConversationClick(conv)}
                   >
                     <div className="flex items-center">
                       <div className="relative">
@@ -117,7 +136,7 @@ export default function Inbox() {
 
       {/* Conversation Display Area */}
       {selectedConversation && friend ? (
-        <div className="flex-1 flex flex-col min-h-screen bg-gray-200 dark:bg-gray-900 divide-y divide-gray-500 dark:divide-gray-700">
+        <div className="flex-1 flex flex-col min-h-screen bg-gray-200 dark:bg-gray-900 ">
           <nav className="bg-gray-100  dark:bg-gray-900">
             <div className="max-w-screen-xl flex items-center justify-between mx-auto p-3">
               <a
@@ -146,71 +165,61 @@ export default function Inbox() {
               </svg>
             </div>
           </nav>
-          
-{/* Message Area */}
-<div className="flex-1 overflow-y-auto p-4">
-  {messages.map((message) => {
-    const isCurrentUser = message.senderId === currentUser.id;
-    const sender = isCurrentUser ? currentUser : friend;
 
-    return (
-      <div
-        key={message.id}
-        className={`flex items-start mb-4 ${
-          isCurrentUser ? "justify-end" : "justify-start"
-        }`}
-      >
-        {/* Avatar on the left for received messages */}
-        {!isCurrentUser && (
-          <img
-            className="w-10 h-10 rounded-full object-cover mr-3"
-            src={sender.avatar}
-            alt={sender.username}
-          />
-        )}
+          {/* Message Area */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {messages.map((message) => {
+              const isCurrentUser = message.senderId === currentUser.id;
+              const sender = isCurrentUser ? currentUser : friend;
 
-        <div >
-
-
-        
+              return (
+                <div
+                  key={message.id}
+                  className={`flex items-start mb-4 ${
+                    isCurrentUser ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  {/* Avatar on the left for received messages */}
                   {!isCurrentUser && (
-                    <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                      {sender.username}
-                    </div>
+                    <img
+                      className="w-10 h-10 rounded-full object-cover mr-3"
+                      src={sender.avatar}
+                      alt={sender.username}
+                    />
                   )}
-                  <div
-                    className={`inline-block max-w-xs p-3 rounded-lg ${
-                      isCurrentUser ? "bg-blue-500 text-white" : "bg-gray-300 text-black"
-                    }`}
-                  >
-                    <p>{message.content}</p>
 
-                  </div>
-                  <span className="text-xs mt-1 block text-gray-500">
-                  {formatDate(message.createdAt)}
+                  <div>
+                    {!isCurrentUser && (
+                      <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                        {sender.username}
+                      </div>
+                    )}
+                    <div
+                      className={`inline-block max-w-lg p-3 rounded-lg ${
+                        isCurrentUser
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-300 text-black"
+                      }`}
+                    >
+                      <p>{message.content}</p>
+                    </div>
+                    <span className="text-xs mt-1 block text-gray-500">
+                      {format(message.createdAt)}
                     </span>
-               
+                  </div>
 
-
-
-
-
-        </div>
-
-        {/* Avatar on the right for sent messages */}
-        {isCurrentUser && (
-          <img
-            className="w-10 h-10 rounded-full object-cover ml-3"
-            src={sender.avatar}
-            alt={sender.username}
-          />
-        )}
-      </div>
-    );
-  })}
-</div>
-
-
+                  {/* Avatar on the right for sent messages */}
+                  {isCurrentUser && (
+                    <img
+                      className="w-10 h-10 rounded-full object-cover ml-3"
+                      src={sender.avatar}
+                      alt={sender.username}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
 
           {/* Message input form */}
           <form className="p-2 pb-16 bg-gray-100">
