@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
 import { format } from "timeago.js";
@@ -8,6 +8,8 @@ export default function Inbox() {
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [newMessageContent, setNewMessageContent] = useState("")
+  const messageContainerRef = useRef(null); 
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -47,13 +49,14 @@ export default function Inbox() {
       loadMessages(conv);
     };
 
-      // Reset selectedConversation to null if the pathname is not /inbox
-  useEffect(() => {
-    if (location.pathname !== "/inbox") {
-      setSelectedConversation(null);
-      localStorage.removeItem("selectedConversationId"); // Clear from localStorage
-    }
-  }, [location.pathname]);
+      // Scroll to the bottom of the message container whenever the messages change
+    useEffect(() => {
+      if (messageContainerRef.current) {
+        messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+      }
+    }, [messages]);
+
+
 
   // Define friend based on selectedConversation and ensure friend is not undefined
   const friend =
@@ -64,6 +67,27 @@ export default function Inbox() {
       ? selectedConversation.user2
       : selectedConversation.user1);
   // console.log(friend);
+
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!newMessageContent.trim()) return;
+
+    try {
+      const { data: newMessage } = await apiRequest.post(`/messages`, {
+        content: newMessageContent,
+        conversationId: selectedConversation.id,
+        senderId: currentUser.id,
+        receiverId: friend.id,
+      });
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setNewMessageContent(""); // Clear input after sending
+    } catch (error) {
+      console.error("Error sending message", error);
+    }
+  };
+
+
 
   // Function to format the createdAt timestamp
   // const formatDate = (date) => {
@@ -167,7 +191,7 @@ export default function Inbox() {
           </nav>
 
           {/* Message Area */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div ref={messageContainerRef} className="flex-1 overflow-y-auto p-4">
             {messages.map((message) => {
               const isCurrentUser = message.senderId === currentUser.id;
               const sender = isCurrentUser ? currentUser : friend;
@@ -219,10 +243,13 @@ export default function Inbox() {
                 </div>
               );
             })}
+
+      
+
           </div>
 
           {/* Message input form */}
-          <form className="p-2 pb-16 bg-gray-100">
+          <form onSubmit={handleSendMessage} className="p-2 pb-16 bg-gray-100">
             <label htmlFor="chat" className="sr-only">
               Your message
             </label>
@@ -284,9 +311,9 @@ export default function Inbox() {
                 id="chat"
                 rows="1"
                 className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-900 placeholder-gray-900 focus:ring-blue-500 focus:border-blue-900 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Your message..."
-                // value={newMessage}
-                // onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Type a message..."
+                value={newMessageContent}
+                onChange={(e) => setNewMessageContent(e.target.value)}
               ></textarea>
               <button
                 type="submit"
