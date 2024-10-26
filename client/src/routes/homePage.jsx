@@ -9,7 +9,7 @@ function HomePage() {
 
   return (
     <div className="flex h-screen pl-4 pt-4 bg-white dark:bg-black">
-      <div className="flex-2 h-[200px] md:h-[530px] w-1/2 bg-white border border-gray-600">
+      <div className="flex-2 h-[200px] md:h-[560px] w-1/2 bg-white border border-gray-600">
         <Suspense fallback={<p>Loading...</p>}>
           <Await
             resolve={data.postResponse}

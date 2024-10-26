@@ -178,7 +178,7 @@ function Navbar() {
               >
                 <span className="sr-only">Open user menu</span>
                 <img
-                  className="w-12 h-12 rounded-full object-fill"
+                  className="w-12 h-12 rounded-full object-cover"
                   src={currentUser.avatar || "noavatar.jpg"}
                   alt="user photo"
                 />
@@ -186,27 +186,30 @@ function Navbar() {
               {/* Dropdown menu */}
               {userDropdownVisible && (
                 <div className="z-50 m-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute right-0">
-                  <div className="px-4 py-3">
-                    <span className="block text-sm text-gray-900 dark:text-white">
+                 
+
+
+             
+                  <ul className="py-2" aria-labelledby="user-menu-button">
+
+                    <li>
+                    <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-gray-700 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-600 dark:text-gray-200 dark:hover:text-white"
+                      >
+                                            <span className="block text-sm text-gray-900 dark:text-white">
                       {currentUser.username}
                     </span>
                     <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
                       {currentUser.email}
                     </span>
-                  </div>
-                  <ul className="py-2" aria-labelledby="user-menu-button">
-                    <li>
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Profile
                       </Link>
                     </li>
+
                     <li>
                       <Link
                         onClick={handleLogout}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                        className="block px-4 py-2 text-sm text-gray-700 rounded-lg hover:bg-red-200 dark:hover:bg-red-600 dark:text-gray-200 dark:hover:text-white"
                       >
                         Sign out
                       </Link>

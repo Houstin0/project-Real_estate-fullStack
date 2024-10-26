@@ -77,37 +77,45 @@ enum Role {
   ADMIN
   USER
 }
+model Conversation {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  user1Id   String     @db.ObjectId
+  user2Id   String     @db.ObjectId
+  messages  Message[]  @relation("ConversationMessages")  // Renamed for clarity
+  
+  user1     User       @relation("User1Conversations", fields: [user1Id], references: [id])
+  user2     User       @relation("User2Conversations", fields: [user2Id], references: [id])
 
-model User {
-  id         String      @id @default(auto()) @map("_id") @db.ObjectId
-  email      String      @unique
-  username   String      @unique
-  password   String
-  avatar     String?
-  createdAt  DateTime    @default(now())
-  posts      Post[]
-  savedPosts SavedPost[]
-  chats      Chat[]      @relation(fields: [chatIDs], references: [id])
-  chatIDs    String[]    @db.ObjectId
-
-  role       Role        @default(USER)
-}
-
-model Chat {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  users     User[]    @relation(fields: [userIDs], references: [id])
-  userIDs   String[]  @db.ObjectId
-  createdAt DateTime  @default(now())
-  seenBy    String[]  @db.ObjectId
-  messages  Message[]
-  lastMessage String?
+  // Ensure unique conversations between user1 and user2
+  @@unique([user1Id, user2Id])
 }
 
 model Message {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  text      String
-  userId    String
-  chat      Chat     @relation(fields: [chatId], references: [id])
-  chatId    String   @db.ObjectId
-  createdAt DateTime @default(now())
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId String        @db.ObjectId
+  senderId       String        @db.ObjectId
+  receiverId     String        @db.ObjectId
+  content        String
+  createdAt      DateTime      @default(now())
+
+  conversation   Conversation   @relation("ConversationMessages", fields: [conversationId], references: [id])
+  sender         User           @relation("SenderMessages", fields: [senderId], references: [id])
+  receiver       User           @relation("ReceiverMessages", fields: [receiverId], references: [id])
 }
+
+model User {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  email             String          @unique
+  username          String          @unique
+  password          String
+  avatar            String?
+  createdAt         DateTime        @default(now())
+  posts             Post[]
+  savedPosts        SavedPost[]
+  conversationsAsUser1 Conversation[] @relation("User1Conversations")
+  conversationsAsUser2 Conversation[] @relation("User2Conversations")
+  messagesSent      Message[]       @relation("SenderMessages")
+  messagesReceived  Message[]       @relation("ReceiverMessages")
+  role              Role            @default(USER)
+}
+

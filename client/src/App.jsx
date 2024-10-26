@@ -1,16 +1,17 @@
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./routes/homePage";
-import { Layout, RequireAuth } from "./routes/layout/layout";
-import SinglePage from "./routes/singlePage/singlePage";
+import { Layout, RequireAuth } from "./routes/layout";
+import SinglePage from "./routes/singlePage";
 import ProfilePage from "./routes/profilePage/profilePage";
 import AdminProfilePage from "./routes/profilePage/adminProfilePage";
 import UserProfilePage from "./routes/profilePage/userProfilePage";
-import Login from "./routes/login/login";
-import Register from "./routes/register/register";
-import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
+import Login from "./routes/auth/login";
+import Register from "./routes/auth/register";
+import ProfileUpdatePage from "./routes/profileUpdatePage";
 import NewPostPage from "./routes/newPostPage/newPostPage";
-import { homePageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
+import { homePageLoader, profilePageLoader, singlePageLoader, inboxPageLoader } from "./lib/loaders";
+
+import Inbox from "./routes/inbox";
 
 function App() {
   const router = createBrowserRouter([
@@ -65,6 +66,11 @@ function App() {
         {
           path: "/add",
           element: <NewPostPage />,
+        },
+        {
+          path: "/inbox",
+          element: <Inbox />,
+          loader: inboxPageLoader
         },
       ],
     },

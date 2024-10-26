@@ -15,9 +15,15 @@ export const homePageLoader = async ({ request, params }) => {
 
 export const profilePageLoader = async () => {
   const postPromise = apiRequest("/users/profilePosts");
-  const chatPromise = apiRequest("/chats");
   return defer({
     postResponse: postPromise,
+   
+  });
+};
+
+export const inboxPageLoader = async () => {
+  const chatPromise = apiRequest("/chats");
+  return defer({
     chatResponse: chatPromise,
   });
 };
