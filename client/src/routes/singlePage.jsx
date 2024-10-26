@@ -157,7 +157,7 @@ function SinglePage() {
   <div className="my-10 w-full md:max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:mt-0 mt-auto">
     <div className="flex flex-col items-center py-8">
       <img
-        className="w-24 h-24 mb-3 rounded-full shadow-lg"
+        className="w-24 h-24 mb-3 rounded-full shadow-lg object-cover"
         src={post.user.avatar}
         alt={post.user.avatar}
       />

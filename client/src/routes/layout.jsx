@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 
 function Layout() {
   return (
-    <div className="layout">
+    <div className="layout h-screen">
       <div className="navbar">
         <Navbar />
       </div>
@@ -22,7 +22,7 @@ function RequireAuth() {
   if (!currentUser) return <Navigate to="/login" />;
   else {
     return (
-      <div className="layout">
+      <div className="layout h-screen">
         <div className="navbar">
           <Navbar />
         </div>

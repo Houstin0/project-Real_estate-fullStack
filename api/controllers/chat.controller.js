@@ -10,8 +10,8 @@ export const getConversations = async (req, res) => {
         OR: [{ user1Id: tokenUserId }, { user2Id: tokenUserId }],
       },
       include: {
-        user1: { select: { id: true, username: true } },
-        user2: { select: { id: true, username: true } },
+        user1: { select: { id: true, username: true, avatar: true  } },
+        user2: { select: { id: true, username: true, avatar: true  } },
       },
     });
     res.json(conversations);
