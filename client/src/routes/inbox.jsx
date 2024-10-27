@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
 import { format } from "timeago.js";
@@ -7,11 +7,11 @@ export default function Inbox() {
   const { currentUser } = useContext(AuthContext);
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [selectedConversation, setSelectedConversation] = useState([]);
   const [newMessageContent, setNewMessageContent] = useState("");
   const messageContainerRef = useRef(null);
   const [openDropdownId, setOpenDropdownId] = useState(null);
-  const dropdownRefs = useRef({})
+  const dropdownRefs = useRef({});
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -26,13 +26,11 @@ export default function Inbox() {
     fetchConversations();
   }, []);
 
-  // Load selected conversation from localStorage on component mount
+  // Load selected conversation from sessionStorage on component mount
   useEffect(() => {
-    const storedConversationId = localStorage.getItem("selectedConversationId");
+    const storedConversationId = sessionStorage.getItem("selectedConversationId");
     if (storedConversationId) {
-      const conversation = conversations.find(
-        (conv) => conv.id === storedConversationId
-      );
+      const conversation = conversations.find((conv) => conv.id === storedConversationId);
       if (conversation) {
         loadMessages(conversation);
       }
@@ -46,7 +44,7 @@ export default function Inbox() {
       );
       setMessages(data);
       setSelectedConversation(conversation);
-      localStorage.setItem("selectedConversationId", conversation.id); // Save selected conversation ID to localStorage
+      sessionStorage.setItem("selectedConversationId", conversation.id);
     } catch (error) {
       console.error("Error loading messages", error);
     }
@@ -92,31 +90,30 @@ export default function Inbox() {
     }
   };
 
-
-
-
   const toggleDropdown = (messageId) => {
     setOpenDropdownId((prevId) => (prevId === messageId ? null : messageId));
-  
+
     setTimeout(() => {
       const dropdown = dropdownRefs.current[messageId];
       if (dropdown) {
-        const observer = new IntersectionObserver((entries, observer) => {
-          const entry = entries[0];
-          
-          // Check if the entire dropdown is not fully visible
-          if (!entry.isIntersecting) {
-            dropdown.scrollIntoView({ behavior: "smooth", block: "nearest" });
-          }
-  
-          observer.disconnect();
-        }, { threshold: 1.0 }); // 1.0 means we want the entire element to be in view
-        
+        const observer = new IntersectionObserver(
+          (entries, observer) => {
+            const entry = entries[0];
+
+            // Check if the entire dropdown is not fully visible
+            if (!entry.isIntersecting) {
+              dropdown.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+
+            observer.disconnect();
+          },
+          { threshold: 1.0 }
+        ); // 1.0 means we want the entire element to be in view
+
         observer.observe(dropdown);
       }
     }, 0);
   };
-  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -130,6 +127,16 @@ export default function Inbox() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      await apiRequest.delete(`/messages/${messageId}`);
+      await loadMessages(selectedConversation);
+      setOpenDropdownId(null);
+    } catch (error) {
+      console.error("Error deleting message", error);
+    }
+  };
 
   return (
     <div className="flex h-screen">
@@ -152,10 +159,14 @@ export default function Inbox() {
               {conversations.map((conv) => {
                 const otherUser =
                   conv.user1.id === currentUser.id ? conv.user2 : conv.user1;
+                const isSelected =
+                  selectedConversation && selectedConversation.id === conv.id;
                 return (
                   <li
                     key={conv.id}
-                    className="p-1 cursor-pointer hover:bg-gray-300 rounded-lg"
+                    className={`p-1 cursor-pointer hover:bg-gray-300 rounded-lg ${
+                      isSelected ? "bg-blue-200" : ""
+                    }`}
                     onClick={() => handleConversationClick(conv)}
                   >
                     <div className="flex items-center">
@@ -214,7 +225,7 @@ export default function Inbox() {
             </div>
           </nav>
 
-          {/* Message Area */}
+          {/* Message Display Area */}
           <div ref={messageContainerRef} className="flex-1 overflow-y-auto p-4">
             {messages.map((message) => {
               const isCurrentUser = message.senderId === currentUser.id;
@@ -239,15 +250,13 @@ export default function Inbox() {
                   <div className="flex items-center space-x-2">
                     {isCurrentUser && (
                       <div className={`relative`}>
-                        {/* Add dropdown button and menu here */}
-
+                        {/*  Dots and Dropdown Menu  */}
                         <button
-                        
                           onClick={() => toggleDropdown(message.id)}
                           id={`dropdownMenuIconButton_${message.id}`}
                           data-dropdown-toggle={`dropdownDots_${message.id}`}
                           data-dropdown-placement="bottom-start"
-                          className="inline-flex self-center items-center text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
+                          className="inline-flex self-center items-center p-1 text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
                           type="button"
                         >
                           <svg
@@ -262,48 +271,42 @@ export default function Inbox() {
                         </button>
                         <div
                           ref={(el) => (dropdownRefs.current[message.id] = el)}
-                          
                           className={`absolute top-full mt-2 right-0 z-10 ${
                             openDropdownId === message.id ? "block" : "hidden"
                           } bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-900`}
                         >
                           <ul
-                          ref={dropdownRef}
+                            ref={dropdownRef}
                             className="py-2 text-sm text-gray-700 dark:text-gray-200"
                             aria-labelledby="dropdownMenuIconButton"
                           >
                             <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
-                              >
-                                Reply
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              <button
+                                onClick={() => {
+                                  // Implement the forwarding logic here
+                                }}
+                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
                               >
                                 Forward
-                              </a>
+                              </button>
                             </li>
                             <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              <button
+                                onClick={() => {
+                                  // Implement the copy logic here
+                                }}
+                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
                               >
                                 Copy
-                              </a>
+                              </button>
                             </li>
-
                             <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:text-red-500 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              <button
+                                onClick={() => handleDeleteMessage(message.id)} // Call delete function
+                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:text-red-500 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
                               >
                                 Delete
-                              </a>
+                              </button>
                             </li>
                           </ul>
                         </div>
@@ -334,13 +337,12 @@ export default function Inbox() {
                     {!isCurrentUser && (
                       <div className={`relative `}>
                         {/* Dots and Dropdown Menu */}
-
                         <button
                           onClick={() => toggleDropdown(message.id)}
                           id={`dropdownMenuIconButton_${message.id}`}
                           data-dropdown-toggle={`dropdownDots_${message.id}`}
                           data-dropdown-placement="bottom-start"
-                          className="inline-flex self-center items-center text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
+                          className="inline-flex self-center items-center p-1 text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
                           type="button"
                         >
                           <svg
@@ -355,48 +357,44 @@ export default function Inbox() {
                         </button>
                         <div
                           ref={(el) => (dropdownRefs.current[message.id] = el)}
-                          
                           className={`absolute top-full mt-2 left-0 z-10 ${
                             openDropdownId === message.id ? "block" : "hidden"
                           } bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-900`}
                         >
                           <ul
-                          ref={dropdownRef}
+                            ref={dropdownRef}
                             className="py-2 text-sm text-gray-700 dark:text-gray-200"
                             aria-labelledby="dropdownMenuIconButton"
                           >
                             <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              <button
+                                onClick={() => {
+                                  // Implement the reply logic here
+                                }}
+                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
                               >
                                 Reply
-                              </a>
+                              </button>
                             </li>
                             <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              <button
+                                onClick={() => {
+                                  // Implement the forwarding logic here
+                                }}
+                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
                               >
                                 Forward
-                              </a>
+                              </button>
                             </li>
                             <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              <button
+                                onClick={() => {
+                                  // Implement the copy logic here
+                                }}
+                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
                               >
                                 Copy
-                              </a>
-                            </li>
-
-                            <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:text-red-500 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
-                              >
-                                Delete
-                              </a>
+                              </button>
                             </li>
                           </ul>
                         </div>
