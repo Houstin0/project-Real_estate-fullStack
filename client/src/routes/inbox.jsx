@@ -8,8 +8,11 @@ export default function Inbox() {
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
-  const [newMessageContent, setNewMessageContent] = useState("")
-  const messageContainerRef = useRef(null); 
+  const [newMessageContent, setNewMessageContent] = useState("");
+  const messageContainerRef = useRef(null);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+  const dropdownRefs = useRef({})
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -27,36 +30,39 @@ export default function Inbox() {
   useEffect(() => {
     const storedConversationId = localStorage.getItem("selectedConversationId");
     if (storedConversationId) {
-      const conversation = conversations.find(conv => conv.id === storedConversationId);
+      const conversation = conversations.find(
+        (conv) => conv.id === storedConversationId
+      );
       if (conversation) {
         loadMessages(conversation);
       }
     }
   }, [conversations]);
 
-    const loadMessages = async (conversation) => {
-      try {
-        const { data } = await apiRequest.get(`/chats/messages/${conversation.id}`);
-        setMessages(data);
-        setSelectedConversation(conversation);
-        localStorage.setItem("selectedConversationId", conversation.id); // Save selected conversation ID to localStorage
-      } catch (error) {
-        console.error("Error loading messages", error);
-      }
-    };
-  
-    const handleConversationClick = (conv) => {
-      loadMessages(conv);
-    };
+  const loadMessages = async (conversation) => {
+    try {
+      const { data } = await apiRequest.get(
+        `/chats/messages/${conversation.id}`
+      );
+      setMessages(data);
+      setSelectedConversation(conversation);
+      localStorage.setItem("selectedConversationId", conversation.id); // Save selected conversation ID to localStorage
+    } catch (error) {
+      console.error("Error loading messages", error);
+    }
+  };
 
-      // Scroll to the bottom of the message container whenever the messages change
-    useEffect(() => {
-      if (messageContainerRef.current) {
-        messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
-      }
-    }, [messages]);
+  const handleConversationClick = (conv) => {
+    loadMessages(conv);
+  };
 
-
+  // Scroll to the bottom of the message container whenever the messages change
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   // Define friend based on selectedConversation and ensure friend is not undefined
   const friend =
@@ -67,7 +73,6 @@ export default function Inbox() {
       ? selectedConversation.user2
       : selectedConversation.user1);
   // console.log(friend);
-
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -89,24 +94,33 @@ export default function Inbox() {
 
 
 
-  // Function to format the createdAt timestamp
-  // const formatDate = (date) => {
-  //   const now = new Date();
-  //   const messageDate = new Date(date);
-  //   const diffInSeconds = Math.floor((now - messageDate) / 1000);
-  //   const diffInMinutes = Math.floor(diffInSeconds / 60);
-  //   const diffInHours = Math.floor(diffInMinutes / 60);
 
-  //   if (diffInSeconds < 60) {
-  //     return "Just now";
-  //   } else if (diffInMinutes < 60) {
-  //     return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
-  //   } else if (diffInHours < 24) {
-  //     return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-  //   } else {
-  //     return messageDate.toLocaleDateString(); // Adjust to your desired date format
-  //   }
-  // };
+  const toggleDropdown = (messageId) => {
+    setOpenDropdownId((prevId) => (prevId === messageId ? null : messageId));
+
+    setTimeout(() => {
+      const dropdown = dropdownRefs.current[messageId];
+      if (dropdown) {
+        const rect = dropdown.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight) {
+          dropdown.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      }
+    }, 0);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdownId(null); // Close dropdown if clicked outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <div className="flex h-screen">
@@ -159,6 +173,7 @@ export default function Inbox() {
       </aside>
 
       {/* Conversation Display Area */}
+
       {selectedConversation && friend ? (
         <div className="flex-1 flex flex-col min-h-screen bg-gray-200 dark:bg-gray-900 ">
           <nav className="bg-gray-100  dark:bg-gray-900">
@@ -212,24 +227,172 @@ export default function Inbox() {
                     />
                   )}
 
-                  <div>
-                    {!isCurrentUser && (
-                      <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                        {sender.username}
+                  <div className="flex items-center space-x-2">
+                    {isCurrentUser && (
+                      <div className={`relative`}>
+                        {/* Add dropdown button and menu here */}
+
+                        <button
+                        
+                          onClick={() => toggleDropdown(message.id)}
+                          id={`dropdownMenuIconButton_${message.id}`}
+                          data-dropdown-toggle={`dropdownDots_${message.id}`}
+                          data-dropdown-placement="bottom-start"
+                          className="inline-flex self-center items-center text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
+                          type="button"
+                        >
+                          <svg
+                            className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 4 15"
+                          >
+                            <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+                          </svg>
+                        </button>
+                        <div
+                          ref={(el) => (dropdownRefs.current[message.id] = el)}
+                          
+                          className={`absolute top-full mt-2 right-0 z-10 ${
+                            openDropdownId === message.id ? "block" : "hidden"
+                          } bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-900`}
+                        >
+                          <ul
+                          ref={dropdownRef}
+                            className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                            aria-labelledby="dropdownMenuIconButton"
+                          >
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Reply
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Forward
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Copy
+                              </a>
+                            </li>
+
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:text-red-500 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Delete
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     )}
-                    <div
-                      className={`inline-block max-w-lg p-3 rounded-lg ${
-                        isCurrentUser
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-300 text-black"
-                      }`}
-                    >
-                      <p>{message.content}</p>
+
+                    <div>
+                      {!isCurrentUser && (
+                        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                          {sender.username}
+                        </div>
+                      )}
+                      <div
+                        className={`inline-block max-w-lg p-3 rounded-lg ${
+                          isCurrentUser
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-300 text-black"
+                        }`}
+                      >
+                        <p>{message.content}</p>
+                      </div>
+
+                      <span className="text-xs mt-1 block text-gray-500">
+                        {format(message.createdAt)}
+                      </span>
                     </div>
-                    <span className="text-xs mt-1 block text-gray-500">
-                      {format(message.createdAt)}
-                    </span>
+
+                    {!isCurrentUser && (
+                      <div className={`relative `}>
+                        {/* Dots and Dropdown Menu */}
+
+                        <button
+                          onClick={() => toggleDropdown(message.id)}
+                          id={`dropdownMenuIconButton_${message.id}`}
+                          data-dropdown-toggle={`dropdownDots_${message.id}`}
+                          data-dropdown-placement="bottom-start"
+                          className="inline-flex self-center items-center text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
+                          type="button"
+                        >
+                          <svg
+                            className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 4 15"
+                          >
+                            <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+                          </svg>
+                        </button>
+                        <div
+                          ref={(el) => (dropdownRefs.current[message.id] = el)}
+                          
+                          className={`absolute top-full mt-2 left-0 z-10 ${
+                            openDropdownId === message.id ? "block" : "hidden"
+                          } bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-900`}
+                        >
+                          <ul
+                          ref={dropdownRef}
+                            className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                            aria-labelledby="dropdownMenuIconButton"
+                          >
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Reply
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Forward
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Copy
+                              </a>
+                            </li>
+
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-gray-900 hover:bg-gray-300 hover:text-red-500 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                              >
+                                Delete
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Avatar on the right for sent messages */}
@@ -243,9 +406,6 @@ export default function Inbox() {
                 </div>
               );
             })}
-
-      
-
           </div>
 
           {/* Message input form */}
