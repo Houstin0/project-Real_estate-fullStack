@@ -97,17 +97,26 @@ export default function Inbox() {
 
   const toggleDropdown = (messageId) => {
     setOpenDropdownId((prevId) => (prevId === messageId ? null : messageId));
-
+  
     setTimeout(() => {
       const dropdown = dropdownRefs.current[messageId];
       if (dropdown) {
-        const rect = dropdown.getBoundingClientRect();
-        if (rect.bottom > window.innerHeight) {
-          dropdown.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
+        const observer = new IntersectionObserver((entries, observer) => {
+          const entry = entries[0];
+          
+          // Check if the entire dropdown is not fully visible
+          if (!entry.isIntersecting) {
+            dropdown.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+  
+          observer.disconnect();
+        }, { threshold: 1.0 }); // 1.0 means we want the entire element to be in view
+        
+        observer.observe(dropdown);
       }
     }, 0);
   };
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
