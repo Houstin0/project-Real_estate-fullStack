@@ -138,6 +138,8 @@ export default function Inbox() {
     }
   };
 
+  console.log (conversations)
+
   return (
     <div className="flex h-screen">
       <aside
@@ -280,7 +282,7 @@ export default function Inbox() {
                             className="py-2 text-sm text-gray-700 dark:text-gray-200"
                             aria-labelledby="dropdownMenuIconButton"
                           >
-                            <li>
+                            {/* <li>
                               <button
                                 onClick={() => {
                                   // Implement the forwarding logic here
@@ -299,7 +301,7 @@ export default function Inbox() {
                               >
                                 Copy
                               </button>
-                            </li>
+                            </li> */}
                             <li>
                               <button
                                 onClick={() => handleDeleteMessage(message.id)} // Call delete function
@@ -334,72 +336,9 @@ export default function Inbox() {
                       </span>
                     </div>
 
-                    {!isCurrentUser && (
-                      <div className={`relative `}>
-                        {/* Dots and Dropdown Menu */}
-                        <button
-                          onClick={() => toggleDropdown(message.id)}
-                          id={`dropdownMenuIconButton_${message.id}`}
-                          data-dropdown-toggle={`dropdownDots_${message.id}`}
-                          data-dropdown-placement="bottom-start"
-                          className="inline-flex self-center items-center p-1 text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
-                          type="button"
-                        >
-                          <svg
-                            className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 4 15"
-                          >
-                            <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                          </svg>
-                        </button>
-                        <div
-                          ref={(el) => (dropdownRefs.current[message.id] = el)}
-                          className={`absolute top-full mt-2 left-0 z-10 ${
-                            openDropdownId === message.id ? "block" : "hidden"
-                          } bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-900`}
-                        >
-                          <ul
-                            ref={dropdownRef}
-                            className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownMenuIconButton"
-                          >
-                            <li>
-                              <button
-                                onClick={() => {
-                                  // Implement the reply logic here
-                                }}
-                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
-                              >
-                                Reply
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                onClick={() => {
-                                  // Implement the forwarding logic here
-                                }}
-                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
-                              >
-                                Forward
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                onClick={() => {
-                                  // Implement the copy logic here
-                                }}
-                                className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
-                              >
-                                Copy
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    )}
+
+                     {/* Dropdown for user that is not logged in user */}
+
                   </div>
 
                   {/* Avatar on the right for sent messages */}
@@ -512,3 +451,74 @@ export default function Inbox() {
     </div>
   );
 }
+
+
+
+
+                    //  {/* Dropdown for user that is not logged in user */}
+                    //  {!isCurrentUser && (
+                    //   <div className={`relative `}>
+                    //     {/* Dots and Dropdown Menu */}
+                    //     <button
+                    //       onClick={() => toggleDropdown(message.id)}
+                    //       id={`dropdownMenuIconButton_${message.id}`}
+                    //       data-dropdown-toggle={`dropdownDots_${message.id}`}
+                    //       data-dropdown-placement="bottom-start"
+                    //       className="inline-flex self-center items-center p-1 text-sm font-medium text-center text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-gray=100 focus:ring-gray-200 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
+                    //       type="button"
+                    //     >
+                    //       <svg
+                    //         className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                    //         aria-hidden="true"
+                    //         xmlns="http://www.w3.org/2000/svg"
+                    //         fill="currentColor"
+                    //         viewBox="0 0 4 15"
+                    //       >
+                    //         <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+                    //       </svg>
+                    //     </button>
+                    //     <div
+                    //       ref={(el) => (dropdownRefs.current[message.id] = el)}
+                    //       className={`absolute top-full mt-2 left-0 z-10 ${
+                    //         openDropdownId === message.id ? "block" : "hidden"
+                    //       } bg-gray-100 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-900`}
+                    //     >
+                    //       <ul
+                    //         ref={dropdownRef}
+                    //         className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                    //         aria-labelledby="dropdownMenuIconButton"
+                    //       >
+                    //         <li>
+                    //           <button
+                    //             onClick={() => {
+                    //               // Implement the reply logic here
+                    //             }}
+                    //             className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                    //           >
+                    //             Reply
+                    //           </button>
+                    //         </li>
+                    //         <li>
+                    //           <button
+                    //             onClick={() => {
+                    //               // Implement the forwarding logic here
+                    //             }}
+                    //             className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                    //           >
+                    //             Forward
+                    //           </button>
+                    //         </li>
+                    //         <li>
+                    //           <button
+                    //             onClick={() => {
+                    //               // Implement the copy logic here
+                    //             }}
+                    //             className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-300 hover:no-underline dark:hover:bg-gray-600 dark:hover:text-gray-100"
+                    //           >
+                    //             Copy
+                    //           </button>
+                    //         </li>
+                    //       </ul>
+                    //     </div>
+                    //   </div>
+                    // )}
