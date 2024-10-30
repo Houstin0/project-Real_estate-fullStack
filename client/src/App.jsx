@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./routes/homePage";
 import { Layout, RequireAuth } from "./routes/layout";
+import ListPage from "./routes/listPage";
 import SinglePage from "./routes/singlePage";
 import ProfilePage from "./routes/profilePage/profilePage";
 import AdminProfilePage from "./routes/profilePage/adminProfilePage";
@@ -9,7 +10,7 @@ import Login from "./routes/auth/login";
 import Register from "./routes/auth/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage";
 import NewPostPage from "./routes/newPostPage/newPostPage";
-import { homePageLoader, profilePageLoader, singlePageLoader, inboxPageLoader } from "./lib/loaders";
+import { listPageLoader, profilePageLoader, singlePageLoader, inboxPageLoader } from "./lib/loaders";
 
 import Inbox from "./routes/inbox";
 
@@ -22,7 +23,11 @@ function App() {
         {
           path: "/",
           element: <HomePage />,
-          loader: homePageLoader,
+        },
+        {
+          path: "/list",
+          element: <ListPage />,
+          loader: listPageLoader,
         },
         {
           path: "/:id",

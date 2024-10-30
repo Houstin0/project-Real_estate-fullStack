@@ -13,16 +13,16 @@ function Filter() {
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setQuery({
       ...query,
-      [e.target.name]: e.target.value,
+      [name]: name === "minPrice" || name === "maxPrice" || name === "bedroom" ? parseInt(value) || "" : value,
     });
   };
 
   const handleFilter = () => {
     setSearchParams(query);
   };
-
   return (
     <div className="flex flex-col gap-1 pb-2">
       {/* <h1 className="font-light text-xl justify-center flex">
@@ -93,12 +93,7 @@ function Filter() {
         </button>
 
         <div className="flex flex-col gap-0.5">
-          <label
-            htmlFor="minPrice"
-            className="text-xs text-black dark:text-white"
-          >
-            Min Price
-          </label>
+          <label htmlFor="minPrice" className="text-xs text-black dark:text-white">Min Price</label>
           <input
             type="number"
             id="minPrice"
@@ -109,15 +104,11 @@ function Filter() {
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
           />
         </div>
+
         <div className="flex flex-col gap-0.5">
-          <label
-            htmlFor="maxPrice"
-            className="text-xs text-black dark:text-white"
-          >
-            Max Price
-          </label>
+          <label htmlFor="maxPrice" className="text-xs text-black dark:text-white">Max Price</label>
           <input
-            type="text"
+            type="number"
             id="maxPrice"
             name="maxPrice"
             placeholder="any"
@@ -126,15 +117,11 @@ function Filter() {
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
           />
         </div>
+
         <div className="flex flex-col gap-0.5">
-          <label
-            htmlFor="bedroom"
-            className="text-xs text-black dark:text-white"
-          >
-            No. of Bedrooms
-          </label>
+          <label htmlFor="bedroom" className="text-xs text-black dark:text-white">No. of Bedrooms</label>
           <input
-            type="text"
+            type="number"
             id="bedroom"
             name="bedroom"
             placeholder="any"

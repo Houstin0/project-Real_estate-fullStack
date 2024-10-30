@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import apiRequest from "../../lib/apiRequest";
-import { useNotificationStore } from "../../lib/notificationStore";
+import { AuthContext } from "../context/AuthContext";
+import apiRequest from "../lib/apiRequest";
+import { useNotificationStore } from "../lib/notificationStore";
 
 function Navbar() {
   const [isDarkMode, setIsDarkMode] = useState(false);

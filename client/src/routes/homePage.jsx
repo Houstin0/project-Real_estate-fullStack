@@ -1,49 +1,57 @@
-import Filter from "../components/filter/Filter";
-import Card from "../components/card/Card";
-import Map from "../components/map/Map";
-import { Await, useLoaderData } from "react-router-dom";
-import { Suspense } from "react";
+import { useContext } from "react";
+import SearchBar from "../components/SearchBar";
+import { AuthContext } from "../context/AuthContext";
+import { TypeAnimation } from "react-type-animation";
 
 function HomePage() {
-  const data = useLoaderData();
+  const { currentUser } = useContext(AuthContext);
 
   return (
-    <div className="flex h-screen pl-4 pt-1 bg-white dark:bg-black">
-      <div className="flex-2  w-1/2">
-      <Filter />
-      <div className="h-[200px] md:h-[440px] bg-white border border-gray-600">
-     
-     <Suspense fallback={<p>Loading...</p>}>
-       <Await
-         resolve={data.postResponse}
-         errorElement={<p>Error loading posts!</p>}
-       >
-         {(postResponse) => <Map items={postResponse.data} />}
-       </Await>
-     </Suspense>
-   </div>
-      </div>
-
-
-      <div className="flex-3 h-screen w-1/2">
+<section className="h-screen bg-center bg-no-repeat bg-cover bg-[url('/background.jpg')] bg-blend-multiply">
+      <div className="relative px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56 top-[-150px]">
+        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-white">
+          Your Go-To Website for{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 md:text-6xl">
+            {/* <TypeAnimation
+              sequence={[
+                "House Hunting",
+                5000,
+                "Finding Your Dream Home",
+                5000,
+                "Exploring New Listings",
+                5000,
+              ]}
+              wrapper="span"
+              speed={50}
+              repeat={Infinity}
+            /> */}
+            House Hunting
+          </span>
+        </h1>
+        <p className="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">
+          Find your dream home effortlessly. Whether you&apos;re looking to rent
+          or buy, our platform offers a seamless way to discover the best
+          properties tailored to your needs. Start your search now and take the
+          first step toward your perfect home.
+        </p>
+        <SearchBar />
+        {/* <div className="flex justify-between space-x-4 sm:flex mt-4">
+          <div className="text-center text-white ">
+            <h1 className="text-4xl lg:text-3xl font-bold">16+</h1>
+            <h2 className="text-xl font-light">Years of Experience</h2>
+          </div>
+          <div className="text-center text-white">
+            <h1 className="text-4xl lg:text-3xl font-bold">200</h1>
       
-        <div className="h-[570px] flex flex-col gap-4 overflow-y-auto pb-6">
-         
-          <Suspense fallback={<p>Loading...</p>}>
-            <Await
-              resolve={data.postResponse}
-              errorElement={<p>Error loading posts!</p>}
-            >
-              {(postResponse) =>
-                postResponse.data.map((post) => (
-                  <Card key={post.id} item={post} />
-                ))
-              }
-            </Await>
-          </Suspense>
-        </div>
+      <h2 className="text-xl font-light">Award Gained</h2>
+          </div>
+          <div className="text-center text-white">
+            <h1 className="text-4xl lg:text-3xl font-bold">2000+</h1>
+            <h2 className="text-xl font-light">Property Ready</h2>
+          </div>
+        </div> */}
       </div>
-    </div>
+    </section>
   );
 }
 

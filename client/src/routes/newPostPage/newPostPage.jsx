@@ -151,7 +151,7 @@ import "./newPostPage.scss";
 import ReactQuill from "react-quill";
 import apiRequest from "../../lib/apiRequest";
 import "react-quill/dist/quill.snow.css";
-import UploadWidget from "../../components/uploadWidget/UploadWidget";
+
 import { useNavigate } from "react-router-dom";
 
 function NewPostPage() {

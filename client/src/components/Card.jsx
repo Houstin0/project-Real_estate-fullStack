@@ -20,7 +20,7 @@ function Card({ item }) {
           <span>{item.address}</span>
         </p>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          $ {item.price}
+          Ksh. {item.price}
         </p>
         <div className="flex justify-between items-center">
           <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
