@@ -24,14 +24,16 @@ function Filter() {
   };
 
   return (
-    <div className="flex flex-col gap-2.5 px-10 pb-4">
+    <div className="flex flex-col gap-1 pb-2">
       {/* <h1 className="font-light text-xl justify-center flex">
         Search results for <b className="mx-2">{searchParams.get("city")}</b>
       </h1> */}
-      <div className="flex flex-wrap gap-6">
+      <div className="flex flex-wrap gap-2">
         {/* Location Input */}
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="city" className="text-xs text-black dark:text-white">Location</label>
+          <label htmlFor="city" className="text-xs text-black dark:text-white">
+            Location
+          </label>
           <input
             type="text"
             id="city"
@@ -39,19 +41,21 @@ function Filter() {
             placeholder="City Location"
             onChange={handleChange}
             value={query.city}
-            className="w-80 p-2 border border-gray-300 rounded-md text-sm"
+            className="w-72 p-2 border border-gray-300 rounded-md text-sm"
           />
         </div>
 
         {/* Type Dropdown */}
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="type" className="text-xs text-black dark:text-white">Type</label>
+          <label htmlFor="type" className="text-xs text-black dark:text-white">
+            Type
+          </label>
           <select
             name="type"
             id="type"
             onChange={handleChange}
             value={query.type}
-            className="w-24 p-2 border border-gray-300 rounded-md text-sm"
+            className="w-18 p-2 border border-gray-300 rounded-md text-sm"
           >
             <option value="">any</option>
             <option value="buy">Buy</option>
@@ -59,10 +63,13 @@ function Filter() {
           </select>
         </div>
 
-
-
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="property" className="text-xs text-black dark:text-white">Property</label>
+          <label
+            htmlFor="property"
+            className="text-xs text-black dark:text-white"
+          >
+            Property
+          </label>
           <select
             name="property"
             id="property"
@@ -78,14 +85,20 @@ function Filter() {
           </select>
         </div>
 
-
-
-      </div>
-      <div className="flex flex-wrap gap-5">
-       
+        <button
+          onClick={handleFilter}
+          className="w-24 h-auto mt-4 p-2 bg-blue-600 text-white border border-transparent rounded-md cursor-pointer"
+        >
+          Filter
+        </button>
 
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="minPrice" className="text-xs text-black dark:text-white">Min Price</label>
+          <label
+            htmlFor="minPrice"
+            className="text-xs text-black dark:text-white"
+          >
+            Min Price
+          </label>
           <input
             type="number"
             id="minPrice"
@@ -97,7 +110,12 @@ function Filter() {
           />
         </div>
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="maxPrice" className="text-xs text-black dark:text-white">Max Price</label>
+          <label
+            htmlFor="maxPrice"
+            className="text-xs text-black dark:text-white"
+          >
+            Max Price
+          </label>
           <input
             type="text"
             id="maxPrice"
@@ -109,7 +127,12 @@ function Filter() {
           />
         </div>
         <div className="flex flex-col gap-0.5">
-          <label htmlFor="bedroom" className="text-xs text-black dark:text-white">Bedroom</label>
+          <label
+            htmlFor="bedroom"
+            className="text-xs text-black dark:text-white"
+          >
+            No. of Bedrooms
+          </label>
           <input
             type="text"
             id="bedroom"
@@ -120,12 +143,11 @@ function Filter() {
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
           />
         </div>
-        <button
-          onClick={handleFilter}
-          className="w-24 h-auto mt-4 p-2 bg-blue-600 text-white border border-transparent rounded-md cursor-pointer"
-        >
-          Search
-        </button>
+      {/* <h1 className="text-2xl justify-center flex">
+        Search results for <b className="mx-2">{searchParams.get("city")}</b>
+      </h1> */}
+
+
       </div>
     </div>
   );

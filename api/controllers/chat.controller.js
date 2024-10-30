@@ -1,6 +1,5 @@
 import prisma from "../lib/prisma.js";
 
-
 export const getConversations = async (req, res) => {
   const tokenUserId = req.userId;
 
@@ -10,8 +9,20 @@ export const getConversations = async (req, res) => {
         OR: [{ user1Id: tokenUserId }, { user2Id: tokenUserId }],
       },
       include: {
-        user1: { select: { id: true, username: true, avatar: true  } },
-        user2: { select: { id: true, username: true, avatar: true  } },
+        user1: { select: { id: true, username: true, avatar: true } },
+        user2: { select: { id: true, username: true, avatar: true } },
+        messages: {
+          select: {
+            id: true,
+            senderId: true,
+            receiverId: true,
+            content: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
     res.json(conversations);
@@ -19,6 +30,7 @@ export const getConversations = async (req, res) => {
     res.status(500).json({ error: "Error fetching conversations" });
   }
 };
+
 
 
 export const getMessages = async (req, res) => {

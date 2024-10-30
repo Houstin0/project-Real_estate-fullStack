@@ -39,10 +39,7 @@ export default function Inbox() {
 
   const loadMessages = async (conversation) => {
     try {
-      const { data } = await apiRequest.get(
-        `/chats/messages/${conversation.id}`
-      );
-      setMessages(data);
+      setMessages(conversation.messages);
       setSelectedConversation(conversation);
       sessionStorage.setItem("selectedConversationId", conversation.id);
     } catch (error) {
@@ -138,7 +135,7 @@ export default function Inbox() {
     }
   };
 
-  console.log (conversations)
+ 
 
   return (
     <div className="flex h-screen">
