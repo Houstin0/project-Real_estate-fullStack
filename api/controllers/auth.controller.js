@@ -9,10 +9,7 @@ export const register = async (req, res) => {
 
   try {
     // HASH THE PASSWORD
-
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    console.log(hashedPassword);
 
     // CREATE A NEW USER AND SAVE TO DB
     const newUser = await prisma.user.create({
@@ -24,9 +21,25 @@ export const register = async (req, res) => {
       },
     });
 
-    console.log(newUser);
+    // GENERATE TOKEN IMMEDIATELY AFTER REGISTRATION
+    const age = 1000 * 60 * 60 * 24 * 7;
+    const token = jwt.sign(
+      {
+        id: newUser.id,
+        isAdmin: newUser.role === "ADMIN",
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: age }
+    );
 
-    res.status(201).json({ message: "User created successfully" });
+    // STORE TOKEN IN SESSION
+    req.session.token = token;
+
+    const { password: userPassword, ...userInfo } = newUser;
+
+    // RETURN TOKEN AND USER INFO
+    res.status(201).json({ token, ...userInfo });
+    
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to create user!" });
@@ -34,13 +47,13 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     // CHECK IF THE USER EXISTS
 
     const user = await prisma.user.findUnique({
-      where: { username },
+      where: { email },
     });
 
     if (!user) return res.status(400).json({ message: "Invalid Credentials!" });

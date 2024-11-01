@@ -34,9 +34,15 @@ export default function ListPage() {
               errorElement={<p>Error loading posts!</p>}
             >
               {(postResponse) =>
-                postResponse.data.map((post) => (
-                  <Card key={post.id} item={post} />
-                ))
+                postResponse.data && postResponse.data.length > 0 ? (
+                  postResponse.data.map((post) => (
+                    <Card key={post.id} item={post} />
+                  ))
+                ) : (
+                  <p className="text-center mt-4 text-gray-500">
+                    No properties found. Try adjusting your filter criteria.
+                  </p>
+                )
               }
             </Await>
           </Suspense>

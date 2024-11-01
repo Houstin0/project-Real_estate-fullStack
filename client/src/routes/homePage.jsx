@@ -7,10 +7,10 @@ function HomePage() {
   const { currentUser } = useContext(AuthContext);
 
   return (
-<section className="h-screen bg-center bg-no-repeat bg-cover bg-[url('/background.jpg')] bg-blend-multiply">
-      <div className="relative px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56 top-[-150px]">
-        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-white">
-          Your Go-To Website for{" "}
+<section className="h-screen bg-center bg-no-repeat bg-cover bg-[url('/background-main.jpeg')] bg-blend-multiply">
+      <div className="relative px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56 top-[-100px]">
+        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-black">
+          Your Go-To Website for House Hunting
           <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 md:text-6xl">
             {/* <TypeAnimation
               sequence={[
@@ -25,15 +25,18 @@ function HomePage() {
               speed={50}
               repeat={Infinity}
             /> */}
-            House Hunting
+            {/* House Hunting */}
           </span>
         </h1>
-        <p className="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">
+        <div className="mb-8 text-lg font-normal text-black lg:text-xl sm:px-16 lg:px-48">
+          <p className="p-1 bg-gray-200 rounded-lg">
           Find your dream home effortlessly. Whether you&apos;re looking to rent
           or buy, our platform offers a seamless way to discover the best
           properties tailored to your needs. Start your search now and take the
           first step toward your perfect home.
-        </p>
+          </p>
+
+        </div>
         <SearchBar />
         {/* <div className="flex justify-between space-x-4 sm:flex mt-4">
           <div className="text-center text-white ">
