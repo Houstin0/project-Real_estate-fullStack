@@ -29,7 +29,7 @@ function HomePage() {
           </span>
         </h1>
         <div className="mb-8 text-lg font-normal text-black lg:text-xl sm:px-16 lg:px-48">
-          <p className="p-1 bg-gray-200 rounded-lg">
+          <p className="p-1 bg-[#F5EFFF] rounded-lg border border-[#A594F9]">
           Find your dream home effortlessly. Whether you&apos;re looking to rent
           or buy, our platform offers a seamless way to discover the best
           properties tailored to your needs. Start your search now and take the
