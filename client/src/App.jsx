@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./routes/homePage";
 import { Layout, RequireAuth } from "./routes/layout";
 import ListPage from "./routes/listPage";
@@ -15,7 +15,7 @@ import { listPageLoader, profilePageLoader, singlePageLoader, inboxPageLoader } 
 import Inbox from "./routes/inbox";
 
 function App() {
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: "/",
       element: <Layout />,

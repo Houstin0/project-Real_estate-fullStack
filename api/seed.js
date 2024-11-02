@@ -29,21 +29,21 @@ async function main() {
       role: "ADMIN",
       password: await hashPassword("password"),
       avatar:
-        "http://localhost:8800/uploads/houstin.jpg",
+        "https://keja-backendapi.onrender.com/uploads/houstin.jpg",
     },
     {
       email: "money@mail.com",
       username: "money",
       password: await hashPassword("password"),
       avatar:
-        "http://localhost:8800/uploads/money.jpg",
+        "https://keja-backendapi.onrender.com/uploads/money.jpg",
     },
     {
       email: "terry@mail.com",
       username: "Terry",
       password: await hashPassword("password"),
       avatar:
-        "http://localhost:8800/uploads/terry.jpg",
+        "https://keja-backendapi.onrender.com/uploads/terry.jpg",
     },
     {
       email: "admin@example.com",
@@ -51,7 +51,7 @@ async function main() {
       role: "ADMIN",
       password: await hashPassword("password"),
       avatar:
-        "http://localhost:8800/uploads/admin.jpg",
+        "https://keja-backendapi.onrender.com/uploads/admin.jpg",
     },
   ];
 
@@ -69,7 +69,7 @@ async function main() {
     {
       title: 'Modern Apartment in Westlands',
       price: 50000,
-      images: ['http://localhost:8800/uploads/house-inside1.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside1.jpg'],
       address: 'Westlands, Nairobi',
       city: 'Nairobi',
       bedroom: 3,
@@ -83,7 +83,7 @@ async function main() {
     {
       title: 'Luxury Villa in Karen',
       price: 150000,
-      images: ['http://localhost:8800/uploads/house1.jpg','http://localhost:8800/uploads/house1-1.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house1.jpg','https://keja-backendapi.onrender.com/uploads/house1-1.jpg'],
       address: 'Karen, Nairobi',
       city: 'Nairobi',
       bedroom: 5,
@@ -97,7 +97,7 @@ async function main() {
     {
       title: 'Affordable Condo in Ruaka',
       price: 35000,
-      images: ['http://localhost:8800/uploads/house-inside2.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside2.jpg'],
       address: 'Ruaka, Nairobi',
       city: 'Nairobi',
       bedroom: 2,
@@ -111,7 +111,7 @@ async function main() {
     {
       title: 'Spacious Land in Ruiru',
       price: 100000,
-      images: ['http://localhost:8800/uploads/house5.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house5.jpg'],
       address: 'Ruiru, Nairobi',
       city: 'Nairobi',
       latitude: '-1.1551',
@@ -123,7 +123,7 @@ async function main() {
     {
       title: '2 Bedroom Apartment in Kilimani',
       price: 60000,
-      images: ['http://localhost:8800/uploads/house-inside3.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside3.jpg'],
       address: 'Kilimani, Nairobi',
       city: 'Nairobi',
       bedroom: 2,
@@ -137,7 +137,7 @@ async function main() {
     {
       title: 'Stylish Condo in Kileleshwa',
       price: 55000,
-      images: ['http://localhost:8800/uploads/house-inside4.jpg','http://localhost:8800/uploads/house-inside16.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside4.jpg','https://keja-backendapi.onrender.com/uploads/house-inside16.jpg'],
       address: 'Kileleshwa, Nairobi',
       city: 'Nairobi',
       bedroom: 3,
@@ -151,7 +151,7 @@ async function main() {
     {
       title: 'Cozy Studio in Pangani',
       price: 25000,
-      images: ['http://localhost:8800/uploads/house-inside5.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside5.jpg'],
       address: 'Pangani, Nairobi',
       city: 'Nairobi',
       bedroom: 1,
@@ -165,7 +165,7 @@ async function main() {
     {
       title: 'Elegant House in Lavington',
       price: 80000,
-      images: ['http://localhost:8800/uploads/house2.jpg','http://localhost:8800/uploads/house-inside15.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house2.jpg','https://keja-backendapi.onrender.com/uploads/house-inside15.jpg'],
       address: 'Lavington, Nairobi',
       city: 'Nairobi',
       bedroom: 4,
@@ -179,7 +179,7 @@ async function main() {
     {
       title: 'Charming Apartment in Lang’ata',
       price: 45000,
-      images: ['http://localhost:8800/uploads/house-inside6.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside6.jpg'],
       address: 'Lang’ata, Nairobi',
       city: 'Nairobi',
       bedroom: 2,
@@ -193,7 +193,7 @@ async function main() {
     {
       title: 'Prime Plot in Juja',
       price: 120000,
-      images: ['http://localhost:8800/uploads/house3.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house3.jpg'],
       address: 'Juja, Nairobi',
       city: 'Nairobi',
       latitude: '-1.1606',
@@ -205,7 +205,7 @@ async function main() {
     {
       title: 'Lovely Condo in Kilimani',
       price: 55000,
-      images: ['http://localhost:8800/uploads/house-inside7.jpg','http://localhost:8800/uploads/house-inside14.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside7.jpg','https://keja-backendapi.onrender.com/uploads/house-inside14.jpg'],
       address: 'Kilimani, Nairobi',
       city: 'Nairobi',
       bedroom: 2,
@@ -219,7 +219,7 @@ async function main() {
     {
       title: 'Spacious House in Karen',
       price: 100000,
-      images: ['http://localhost:8800/uploads/house6.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house6.jpg'],
       address: 'Karen, Nairobi',
       city: 'Nairobi',
       bedroom: 4,
@@ -233,7 +233,7 @@ async function main() {
     {
       title: 'Modern Apartment in Nairobi CBD',
       price: 65000,
-      images: ['http://localhost:8800/uploads/house-inside8.jpg','http://localhost:8800/uploads/house-inside13.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside8.jpg','https://keja-backendapi.onrender.com/uploads/house-inside13.jpg'],
       address: 'Nairobi CBD',
       city: 'Nairobi',
       bedroom: 3,
@@ -247,7 +247,7 @@ async function main() {
     {
       title: 'Newly Built House in Gikambura',
       price: 95000,
-      images: ['http://localhost:8800/uploads/house4.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house4.jpg'],
       address: 'Gikambura, Nairobi',
       city: 'Nairobi',
       bedroom: 5,
@@ -261,7 +261,7 @@ async function main() {
     {
       title: 'Luxury Condo in Riverside',
       price: 70000,
-      images: ['http://localhost:8800/uploads/house-inside9.jpg','http://localhost:8800/uploads/house-inside12.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside9.jpg','https://keja-backendapi.onrender.com/uploads/house-inside12.jpg'],
       address: 'Riverside, Nairobi',
       city: 'Nairobi',
       bedroom: 3,
@@ -275,7 +275,7 @@ async function main() {
     {
       title: 'Affordable House in Mombasa Road',
       price: 40000,
-      images: ['http://localhost:8800/uploads/house7.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house7.jpg'],
       address: 'Mombasa Road, Nairobi',
       city: 'Nairobi',
       bedroom: 3,
@@ -289,7 +289,7 @@ async function main() {
     {
       title: 'Prime Commercial Property in Westlands',
       price: 200000,
-      images: ['http://localhost:8800/uploads/bulding1.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/bulding1.jpg'],
       address: 'Westlands, Nairobi',
       city: 'Nairobi',
       latitude: '-1.2700',
@@ -301,7 +301,7 @@ async function main() {
     {
       title: 'Beautiful Land in Kangemi',
       price: 80000,
-      images: ['http://localhost:8800/uploads/house3.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house3.jpg'],
       address: 'Kangemi, Nairobi',
       city: 'Nairobi',
       latitude: '-1.2736',
@@ -313,7 +313,7 @@ async function main() {
     {
       title: 'Elegant Apartment in Hurlingham',
       price: 50000,
-      images: ['http://localhost:8800/uploads/house-inside10.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house-inside10.jpg'],
       address: 'Hurlingham, Nairobi',
       city: 'Nairobi',
       bedroom: 2,
@@ -327,7 +327,7 @@ async function main() {
     {
       title: 'Luxurious Villa in Gigiri',
       price: 180000,
-      images: ['http://localhost:8800/uploads/house7.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house7.jpg'],
       address: 'Gigiri, Nairobi',
       city: 'Nairobi',
       bedroom: 6,
@@ -341,7 +341,7 @@ async function main() {
     {
       title: 'Cozy House in Nairobi South',
       price: 42000,
-      images: ['http://localhost:8800/uploads/house2.jpg' ,'http://localhost:8800/uploads/house-inside11.jpg'],
+      images: ['https://keja-backendapi.onrender.com/uploads/house2.jpg' ,'https://keja-backendapi.onrender.com/uploads/house-inside11.jpg'],
       address: 'Nairobi South',
       city: 'Nairobi',
       bedroom: 3,
