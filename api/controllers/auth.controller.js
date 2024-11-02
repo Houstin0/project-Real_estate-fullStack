@@ -51,16 +51,15 @@ export const login = async (req, res) => {
 
   try {
     // CHECK IF THE USER EXISTS
+
     const user = await prisma.user.findUnique({
       where: { email },
-      include: {
-        conversations: true, // Include conversations related to the user
-      },
     });
 
     if (!user) return res.status(400).json({ message: "Invalid Credentials!" });
 
     // CHECK IF THE PASSWORD IS CORRECT
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid)
@@ -77,13 +76,11 @@ export const login = async (req, res) => {
       { expiresIn: age }
     );
 
-    // Exclude password from userInfo
     const { password: userPassword, ...userInfo } = user;
 
     // STORE TOKEN IN SESSION
     req.session.token = token;
 
-    // Return the token and user information with conversations
     res.status(200).json({ token, ...userInfo });
     
   } catch (err) {
