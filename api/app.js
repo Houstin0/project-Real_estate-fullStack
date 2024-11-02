@@ -17,7 +17,7 @@ const app = express();
 
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = ["http://127.0.0.1:5173", "http://localhost:5173"];
+    const allowedOrigins = ["http://127.0.0.1:5173", "http://localhost:5173",process.env.BASE_URL];
     if (!origin || allowedOrigins.some(url => origin.startsWith(url))) {
       callback(null, true);
     } else {
