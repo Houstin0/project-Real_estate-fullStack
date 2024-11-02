@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
@@ -83,18 +83,32 @@ function Navbar() {
   const fetch = useNotificationStore((state) => state.fetch);
   // const number = useNotificationStore((state) => state.number);
 
+  const dropdownRef = useRef(null);
   const [userDropdownVisible, setUserDropdownVisible] = useState(false);
-  const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
 
   // Toggle user dropdown
   const toggleUserDropdown = () => {
     setUserDropdownVisible(!userDropdownVisible);
   };
 
-  // Toggle mobile menu
-  const toggleMobileMenu = () => {
-    setMobileMenuVisible(!mobileMenuVisible);
-  };
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setUserDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Reset dropdown visibility on page refresh
+  useEffect(() => {
+    setUserDropdownVisible(false);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -124,10 +138,10 @@ function Navbar() {
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           {/* User menu */}
           {currentUser ? (
-            <div>
+            <div ref={dropdownRef}>
               <button
                 type="button"
-                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-[#A594F9] dark:focus:ring-[#A594F9]"
                 onClick={toggleUserDropdown}
                 aria-expanded={userDropdownVisible}
               >
@@ -140,12 +154,12 @@ function Navbar() {
               </button>
               {/* Dropdown menu */}
               {userDropdownVisible && (
-                <div className="z-50 m-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute right-0">
-                  <ul className="py-2" aria-labelledby="user-menu-button">
+                <div className="z-50 mx-4 my-1 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-black dark:divide-gray-600 absolute right-4 border-2 border-[#A594F9]">
+                  <ul aria-labelledby="user-menu-button">
                     <li>
                       <Link
                         to="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-600 dark:text-gray-200 dark:hover:text-white"
+                        className="block px-4 py-2 text-sm text-gray-700 rounded-t-lg hover:bg-blue-200 dark:hover:bg-blue-600 dark:text-gray-200 dark:hover:text-white"
                       >
                         <span className="block text-sm text-gray-900 dark:text-white">
                           {currentUser.username}
@@ -160,7 +174,7 @@ function Navbar() {
                       {/* Dark mode toggle button */}
                       <button
                         onClick={toggleDarkMode}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
                         {/* Moon icon for dark mode */}
                         <svg
@@ -209,7 +223,7 @@ function Navbar() {
                     <li>
                       <Link
                         onClick={handleLogout}
-                        className="block px-4 py-2 text-sm text-gray-700 rounded-lg hover:bg-red-200 dark:hover:bg-red-600 dark:text-gray-200 dark:hover:text-white"
+                        className="block px-4 py-2 text-sm text-gray-700 rounded-b-lg hover:bg-red-200 dark:hover:bg-red-600 dark:text-gray-200 dark:hover:text-white"
                       >
                         Sign out
                       </Link>

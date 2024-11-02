@@ -8,10 +8,10 @@ export default function ListPage() {
   const data = useLoaderData();
 
   return (
-    <div className="flex h-screen pl-4 pt-1 bg-white dark:bg-black">
+    <div className="flex h-screen pl-4 pt-1  bg-gradient-to-r from-white to-[#F5EFFF] dark:from-black dark:to-black ">
       <div className="flex-2  w-1/2">
       <Filter />
-      <div className="h-[200px] md:h-[440px] bg-white border border-gray-600">
+      <div className="h-[200px] md:h-[440px] bg-white border border-[#F5EFFF] dark:border-black">
      <Suspense fallback={<p>Loading...</p>}>
        <Await
          resolve={data.postResponse}

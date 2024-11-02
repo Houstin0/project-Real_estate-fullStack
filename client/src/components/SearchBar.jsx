@@ -7,8 +7,8 @@ function SearchBar() {
   const [query, setQuery] = useState({
     type: "rent",
     city: "",
-    minPrice: 0,
-    maxPrice: 0,
+    minPrice: "",
+    maxPrice: "",
   });
 
   const switchType = (val) => {
@@ -57,7 +57,7 @@ function SearchBar() {
             type="number"
             name="minPrice"
             className="block w-1/3 p-4 text-base text-black border border-[#A594F9] bg-[#F5EFFF] placeholder-gray-500"
-            min={0}
+            min={1}
             max={10000000}
             placeholder="Min Price"
             onChange={handleChange}
@@ -66,7 +66,7 @@ function SearchBar() {
             type="number"
             name="maxPrice"
             className="block w-1/3 p-4 text-base text-black border border-[#A594F9] rounded-r-lg bg-[#F5EFFF] focus:ring-[#A594F9] focus:border-[#A594F9]   placeholder-gray-500 dark:focus:ring-[#A594F9] dark:focus:border-[#A594F9]"
-            min={0}
+            min={1}
             max={10000000}
             placeholder="Max Price"
             onChange={handleChange}

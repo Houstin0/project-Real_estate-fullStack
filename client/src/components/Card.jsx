@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
+import LazyLoad from "react-lazyload";
 
 function Card({ item }) {
   return (
     <Link
       to={`/${item.id}`}
-      className="mx-8 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+      className="mx-8 flex flex-col items-center bg-white border md:max-h-48  border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
     >
       <img
-        className="object-cover w-full rounded-t-lg h-96 md:h-48 md:w-64 md:rounded-none md:rounded-s-lg"
+        className="object-cover w-full h-full md:h-full md:w-64 rounded-t-lg md:rounded-none md:rounded-s-lg"
         src={item.images[0]}
         alt={item.title}
       />
@@ -25,22 +26,22 @@ function Card({ item }) {
         <div className="flex justify-between items-center">
           <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-2">
-              <img src="/bed.png" alt="bedroom" className="w-4 h-4" />
+              <img src="/bedrooms.gif" alt="bedroom" className="w-8 h-8" />
               <span>{item.bedroom} bedroom</span>
             </div>
             <div className="flex items-center gap-2">
-              <img src="/bath.png" alt="bathroom" className="w-4 h-4" />
+              <img src="/bathroom.gif" alt="bathroom" className="w-8 h-8" />
               <span>{item.bathroom} bathroom</span>
             </div>
           </div>
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <button className="p-2 border border-gray-300 rounded-md hover:bg-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
               <img src="/save.png" alt="save" className="w-4 h-4" />
             </button>
             <button className="p-2 border border-gray-300 rounded-md hover:bg-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
               <img src="/chat.png" alt="chat" className="w-4 h-4" />
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </Link>

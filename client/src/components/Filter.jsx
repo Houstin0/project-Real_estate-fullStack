@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 function Filter() {
@@ -12,16 +12,17 @@ function Filter() {
     bedroom: searchParams.get("bedroom") || "",
   });
 
+  // Update search parameters whenever query state changes
+  useEffect(() => {
+    setSearchParams(query);
+  }, [query, setSearchParams]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setQuery({
       ...query,
       [name]: name === "minPrice" || name === "maxPrice" || name === "bedroom" ? parseInt(value) || "" : value,
     });
-  };
-
-  const handleFilter = () => {
-    setSearchParams(query);
   };
   return (
     <div className="flex flex-col gap-1 pb-2">
@@ -57,7 +58,7 @@ function Filter() {
             value={query.type}
             className="w-18 p-2 border border-gray-300 rounded-md text-sm"
           >
-            <option value="">any</option>
+            <option value="">ALL</option>
             <option value="buy">Buy</option>
             <option value="rent">Rent</option>
           </select>
@@ -75,9 +76,9 @@ function Filter() {
             id="property"
             onChange={handleChange}
             value={query.property}
-            className="w-24 p-2 border border-gray-300 rounded-md text-sm"
+            className="w-26 p-2 border border-gray-300 rounded-md text-sm"
           >
-            <option value="">any</option>
+            <option value="">ALL</option>
             <option value="apartment">Apartment</option>
             <option value="house">House</option>
             <option value="condo">Condo</option>
@@ -85,25 +86,7 @@ function Filter() {
           </select>
         </div>
 
-        <button
-          onClick={handleFilter}
-          className="w-24 h-auto mt-4 p-2 bg-blue-600 text-white border border-transparent rounded-md cursor-pointer"
-        >
-          Filter
-        </button>
 
-        <div className="flex flex-col gap-0.5">
-          <label htmlFor="minPrice" className="text-xs text-black dark:text-white">Min Price</label>
-          <input
-            type="number"
-            id="minPrice"
-            name="minPrice"
-            placeholder="any"
-            onChange={handleChange}
-            value={query.minPrice}
-            className="w-24 p-2 border border-gray-300 rounded-md text-sm"
-          />
-        </div>
 
         <div className="flex flex-col gap-0.5">
           <label htmlFor="maxPrice" className="text-xs text-black dark:text-white">Max Price</label>
@@ -111,10 +94,27 @@ function Filter() {
             type="number"
             id="maxPrice"
             name="maxPrice"
-            placeholder="any"
+            placeholder="ALL"
             onChange={handleChange}
             value={query.maxPrice}
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
+            min={1}
+            max={10000000}
+          />
+        </div>
+
+        <div className="flex flex-col gap-0.5">
+          <label htmlFor="minPrice" className="text-xs text-black dark:text-white">Min Price</label>
+          <input
+            type="number"
+            id="minPrice"
+            name="minPrice"
+            placeholder="ALL"
+            onChange={handleChange}
+            value={query.minPrice}
+            className="w-24 p-2 border border-gray-300 rounded-md text-sm"
+            min={1}
+            max={10000000}
           />
         </div>
 
@@ -124,7 +124,7 @@ function Filter() {
             type="number"
             id="bedroom"
             name="bedroom"
-            placeholder="any"
+            placeholder="ALL"
             onChange={handleChange}
             value={query.bedroom}
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
