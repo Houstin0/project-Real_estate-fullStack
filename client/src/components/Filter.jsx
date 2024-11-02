@@ -94,7 +94,7 @@ function Filter() {
             type="number"
             id="maxPrice"
             name="maxPrice"
-            placeholder="ALL"
+            placeholder="Any"
             onChange={handleChange}
             value={query.maxPrice}
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
@@ -109,7 +109,7 @@ function Filter() {
             type="number"
             id="minPrice"
             name="minPrice"
-            placeholder="ALL"
+            placeholder="Any"
             onChange={handleChange}
             value={query.minPrice}
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
@@ -124,7 +124,7 @@ function Filter() {
             type="number"
             id="bedroom"
             name="bedroom"
-            placeholder="ALL"
+            placeholder="Any"
             onChange={handleChange}
             value={query.bedroom}
             className="w-24 p-2 border border-gray-300 rounded-md text-sm"
