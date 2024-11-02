@@ -31,7 +31,7 @@ function UserProfilePage() {
               <div className="flex space-x-4">
                 <img
                   className="h-28 w-28 rounded-lg object-cover"
-                  src={currentUser.avatar || "noavatar.jpg"}
+                  src={currentUser.avatar || "/noavatar.jpg"}
                   alt={currentUser.username}
                 />
                 <div>
