@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,38 @@ import { useNavigate } from "react-router-dom";
 function UserProfilePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [location, setLocation] = useState("Fetching location...");
+
+  useEffect(() => {
+    const fetchLocationName = async (latitude, longitude) => {
+      try {
+        const response = await axios.get(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+        );
+        console.log(response.data)
+        const locationName = response.data?.display_name;
+        setLocation(locationName || "Location not found.");
+      } catch (error) {
+        console.error("Error fetching location name:", error);
+        setLocation("Unable to fetch location.");
+      }
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchLocationName(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error fetching location:", error);
+          setLocation("Location access denied.");
+        }
+      );
+    } else {
+      setLocation("Geolocation is not supported by this browser.");
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -56,6 +89,14 @@ function UserProfilePage() {
                 </dt>
                 <dd className="text-gray-500 dark:text-gray-400">
                   +1234 567 890 / +12 345 678
+                </dd>
+              </dl>
+              <dl>
+                <dt className="font-semibold text-gray-900 dark:text-white">
+                  Location
+                </dt>
+                <dd className="text-gray-500 dark:text-gray-400">
+                  {location}
                 </dd>
               </dl>
             </div>

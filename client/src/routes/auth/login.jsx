@@ -37,6 +37,7 @@ function Login() {
       localStorage.setItem("token", res.data.token);
 
       updateUser(res.data);
+      console.log(res.data);
 
       navigate("/");
     } catch (err) {
