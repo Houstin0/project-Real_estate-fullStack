@@ -1,6 +1,6 @@
 import Slider from "../components/slider/Slider";
 import Map from "../components/Map";
-import { useNavigate, useLoaderData } from "react-router-dom";
+import { useNavigate, useLoaderData, Link } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -25,11 +25,14 @@ function SinglePage() {
     }
   };
 
+  console.log (post)
+
+
   return (
-    <section className="relative py-8 bg-white md:py-16 dark:bg-black antialiased overflow-y-auto h-screen">
+    <section className="relative py-4 md:py-8 bg-gradient-to-r from-white to-[#F5EFFF] via-white dark:from-black dark:to-black antialiased overflow-y-auto h-screen">
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0 ">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
-          <div className="shrink-0 max-w-md lg:max-w-lg mx-auto">
+          <div className="shrink-0 max-w-md lg:max-w-lg mx-auto mb-8">
             <Slider images={post.images} />
           </div>
 
@@ -128,222 +131,83 @@ function SinglePage() {
         </div>
 
         <div className="relative flex flex-col md:flex-row items-center gap-4 md:gap-8">
-  {/* Property Info Section */}
-  <div className="md:absolute w-full md:w-1/2 my-2 right-0 top-0 grid grid-cols-1 md:grid-cols-3">
-    <div className="flex items-center md:justify-center">
-      <img className="w-16 h-16 rounded-lg" src="/bedrooms.gif" alt="Bedrooms" />
-      <div className="ml-4">
-        <p className="font-semibold text-gray-900 dark:text-white">Bedroom</p>
-        <div className="text-xl text-gray-900 dark:text-white">{post.bedroom}</div>
-      </div>
-    </div>
-    <div className="flex items-center md:justify-center">
-      <img className="w-16 h-16 rounded-lg" src="/bathroom.gif" alt="Bathrooms" />
-      <div className="ml-4">
-        <p className="font-semibold text-gray-900 dark:text-white">Bathroom</p>
-        <div className="text-xl text-gray-900 dark:text-white">{post.bathroom}</div>
-      </div>
-    </div>
-    <div className="flex items-center md:justify-center">
-      <img className="w-16 h-16 rounded-lg" src="/toilet.gif" alt="Toilet" />
-      <div className="ml-4">
-        <p className="font-semibold text-gray-900 dark:text-white">Toilet</p>
-        <div className="text-xl text-gray-900 dark:text-white">{post.bathroom}</div>
-      </div>
-    </div>
-  </div>
+          {/* Property Info Section */}
+          <div className="md:absolute w-full md:w-1/2 my-2 right-0 top-0 grid grid-cols-1 md:grid-cols-3">
+            <div className="flex items-center md:justify-center">
+              <img
+                className="w-16 h-16 rounded-lg"
+                src="/bedrooms.gif"
+                alt="Bedrooms"
+              />
+              <div className="ml-4">
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  Bedroom
+                </p>
+                <div className="text-xl text-gray-900 dark:text-white">
+                  {post.bedroom}
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center md:justify-center">
+              <img
+                className="w-16 h-16 rounded-lg"
+                src="/bathroom.gif"
+                alt="Bathrooms"
+              />
+              <div className="ml-4">
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  Bathroom
+                </p>
+                <div className="text-xl text-gray-900 dark:text-white">
+                  {post.bathroom}
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center md:justify-center">
+              <img
+                className="w-16 h-16 rounded-lg"
+                src="/toilet.gif"
+                alt="Toilet"
+              />
+              <div className="ml-4">
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  Toilet
+                </p>
+                <div className="text-xl text-gray-900 dark:text-white">
+                  {post.bathroom}
+                </div>
+              </div>
+            </div>
+          </div>
 
-  {/* User Info Section */}
-  <div className="my-10 w-full md:max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:mt-0 mt-auto">
-    <div className="flex flex-col items-center py-8">
-      <img
-        className="w-24 h-24 mb-3 rounded-full shadow-lg object-cover"
-        src={post.user.avatar}
-        alt={post.user.avatar}
-      />
-      <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-        {post.user.username}
-      </h5>
-      <span className="text-sm text-gray-500 dark:text-gray-400">Landlord</span>
-      <div className="flex mt-4 md:mt-6">
-        <a
-          href="#"
-          className="py-2 px-4 text-sm font-medium text-gray-900 bg-blue-400 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-        >
-          Message
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
+          {/* User Info Section */}
+          <div className="my-10 w-full md:max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:mt-0 mt-auto">
+            <div className="flex flex-col items-center py-8">
+              <img
+                className="w-24 h-24 mb-3 rounded-full shadow-lg object-cover"
+                src={post.user.avatar}
+                alt={post.user.avatar}
+              />
+              <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                {post.user.username}
+              </h5>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Landlord
+              </span>
+              <div className="flex mt-4 md:mt-6">
+                < Link
+                  to={`/${post.userId}`}
+                  className="py-2 px-4 text-sm font-medium text-gray-900 bg-blue-400 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                >
+                  Message Landlord
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
 export default SinglePage;
-
-// import "./singlePage.scss";
-// import Slider from "../../components/slider/Slider";
-// import Map from "../../components/map/Map";
-// import { useNavigate, useLoaderData } from "react-router-dom";
-// import DOMPurify from "dompurify";
-// import { useContext, useState } from "react";
-// import { AuthContext } from "../../context/AuthContext";
-// import apiRequest from "../../lib/apiRequest";
-
-// function SinglePage() {
-//   const post = useLoaderData();
-//   const [saved, setSaved] = useState(post.isSaved);
-//   const { currentUser } = useContext(AuthContext);
-//   const navigate = useNavigate();
-
-//   const handleSave = async () => {
-//     if (!currentUser) {
-//       navigate("/login");
-//     }
-//     // AFTER REACT 19 UPDATE TO USEOPTIMISTIK HOOK
-//     setSaved((prev) => !prev);
-//     try {
-//       await apiRequest.post("/users/save", { postId: post.id });
-//     } catch (err) {
-//       console.log(err);
-//       setSaved((prev) => !prev);
-//     }
-//   };
-
-//   return (
-//     <div className="singlePage overflow-y-auto">
-//       <div className="details">
-//         <div className="wrapper">
-//           <Slider images={post.images} />
-//           <div className="info">
-//             <div className="top">
-//               <div className="post">
-//                 <h1>{post.title}</h1>
-//                 <div className="address">
-//                   <img src="/pin.png" alt="" />
-//                   <span>{post.address}</span>
-//                 </div>
-//                 <div className="price">$ {post.price}</div>
-//               </div>
-//               <div className="user">
-//                 <img src={post.user.avatar} alt="" />
-//                 <span>{post.user.avatar}</span>
-//               </div>
-//             </div>
-//             {/* <div
-//               className="bottom"
-//               dangerouslySetInnerHTML={{
-//                 __html: DOMPurify.sanitize(post.postDetail.desc),
-//               }}
-//             ></div> */}
-//           </div>
-//         </div>
-//       </div>
-//       {/* <div className="features">
-//         <div className="wrapper">
-//           <p className="title">General</p>
-//           <div className="listVertical">
-//             <div className="feature">
-//               <img src="/utility.png" alt="" />
-//               <div className="featureText">
-//                 <span>Utilities</span>
-//                 {post.postDetail.utilities === "owner" ? (
-//                   <p>Owner is responsible</p>
-//                 ) : (
-//                   <p>Tenant is responsible</p>
-//                 )}
-//               </div>
-//             </div>
-//             <div className="feature">
-//               <img src="/pet.png" alt="" />
-//               <div className="featureText">
-//                 <span>Pet Policy</span>
-//                 {post.postDetail.pet === "allowed" ? (
-//                   <p>Pets Allowed</p>
-//                 ) : (
-//                   <p>Pets not Allowed</p>
-//                 )}
-//               </div>
-//             </div>
-//             <div className="feature">
-//               <img src="/fee.png" alt="" />
-//               <div className="featureText">
-//                 <span>Income Policy</span>
-//                 <p>{post.postDetail.income}</p>
-//               </div>
-//             </div>
-//           </div>
-//           <p className="title">Sizes</p>
-//           <div className="sizes">
-//             <div className="size">
-//               <img src="/size.png" alt="" />
-//               <span>{post.postDetail.size} sqft</span>
-//             </div>
-//             <div className="size">
-//               <img src="/bed.png" alt="" />
-//               <span>{post.bedroom} beds</span>
-//             </div>
-//             <div className="size">
-//               <img src="/bath.png" alt="" />
-//               <span>{post.bathroom} bathroom</span>
-//             </div>
-//           </div>
-//           <p className="title">Nearby Places</p>
-//           <div className="listHorizontal">
-//             <div className="feature">
-//               <img src="/school.png" alt="" />
-//               <div className="featureText">
-//                 <span>School</span>
-//                 <p>
-//                   {post.postDetail.school > 999
-//                     ? post.postDetail.school / 1000 + "km"
-//                     : post.postDetail.school + "m"}{" "}
-//                   away
-//                 </p>
-//               </div>
-//             </div>
-//             <div className="feature">
-//               <img src="/pet.png" alt="" />
-//               <div className="featureText">
-//                 <span>Bus Stop</span>
-//                 <p>{post.postDetail.bus}m away</p>
-//               </div>
-//             </div>
-//             <div className="feature">
-//               <img src="/fee.png" alt="" />
-//               <div className="featureText">
-//                 <span>Restaurant</span>
-//                 <p>{post.postDetail.restaurant}m away</p>
-//               </div>
-//             </div>
-//           </div>
-//           <p className="title">Location</p>
-//           <div className="mapContainer">
-//             <Map items={[post]} />
-//           </div>
-//           <div className="buttons">
-//             <button>
-//               <img src="/chat.png" alt="" />
-//               Send a Message
-//             </button>
-//             <button
-//               onClick={handleSave}
-//               style={{
-//                 backgroundColor: saved ? "#fece51" : "white",
-//               }}
-//             >
-//               <img src="/save.png" alt="" />
-//               {saved ? "Place Saved" : "Save the Place"}
-//             </button>
-//           </div>
-//         </div>
-//       </div> */}
-//     </div>
-//   );
-// }
-
-// export default SinglePage;

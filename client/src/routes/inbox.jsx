@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
 import { format } from "timeago.js";
@@ -13,29 +14,32 @@ export default function Inbox() {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const dropdownRefs = useRef({});
   const dropdownRef = useRef(null);
+  const landlordId = location.state?.landlordId;
 
-  useEffect(() => {
-    const fetchConversations = async () => {
-      try {
-        const { data } = await apiRequest.get(`/chats`);
-        setConversations(data);
-      } catch (error) {
-        console.error("Error loading conversations", error);
-      }
-    };
-    fetchConversations();
-  }, []);
+  console.log(landlordId)
 
-  // Load selected conversation from sessionStorage on component mount
-  useEffect(() => {
-    const storedConversationId = sessionStorage.getItem("selectedConversationId");
-    if (storedConversationId) {
-      const conversation = conversations.find((conv) => conv.id === storedConversationId);
-      if (conversation) {
-        loadMessages(conversation);
-      }
-    }
-  }, [conversations]);
+  // useEffect(() => {
+  //   const fetchConversations = async () => {
+  //     try {
+  //       const { data } = await apiRequest.get(`/chats`);
+  //       setConversations(data);
+  //     } catch (error) {
+  //       console.error("Error loading conversations", error);
+  //     }
+  //   };
+  //   fetchConversations();
+  // }, []);
+
+  // // Load selected conversation from sessionStorage on component mount
+  // useEffect(() => {
+  //   const storedConversationId = sessionStorage.getItem("selectedConversationId");
+  //   if (storedConversationId) {
+  //     const conversation = conversations.find((conv) => conv.id === storedConversationId);
+  //     if (conversation) {
+  //       loadMessages(conversation);
+  //     }
+  //   }
+  // }, [conversations]);
 
   const loadMessages = async (conversation) => {
     try {
@@ -139,7 +143,7 @@ export default function Inbox() {
 
   return (
     <div className="flex h-screen">
-      <aside
+      {/* <aside
         id="logo-sidebar"
         className="w-64 h-full bg-gray-100 border-r border-gray-200 dark:bg-gray-900 dark:border-gray-700"
         aria-label="Sidebar"
@@ -189,13 +193,13 @@ export default function Inbox() {
             </ul>
           </div>
         </div>
-      </aside>
+      </aside> */}
 
       {/* Conversation Display Area */}
 
       {selectedConversation && friend ? (
-        <div className="flex-1 flex flex-col min-h-screen bg-gray-200 dark:bg-gray-900 ">
-          <nav className="bg-gray-100  dark:bg-gray-900">
+        <div className="flex-1 flex flex-col min-h-screen bg-gray-200 dark:bg-gray-900">
+          <nav className="bg-gray-100  dark:bg-gray-900 px-4">
             <div className="max-w-screen-xl flex items-center justify-between mx-auto p-3">
               <a
                 href=""
@@ -225,7 +229,7 @@ export default function Inbox() {
           </nav>
 
           {/* Message Display Area */}
-          <div ref={messageContainerRef} className="flex-1 overflow-y-auto p-4">
+          <div ref={messageContainerRef} className="flex-1 overflow-y-auto p-4 px-8">
             {messages.map((message) => {
               const isCurrentUser = message.senderId === currentUser.id;
               const sender = isCurrentUser ? currentUser : friend;
@@ -352,7 +356,7 @@ export default function Inbox() {
           </div>
 
           {/* Message input form */}
-          <form onSubmit={handleSendMessage} className="p-2 pb-16 bg-gray-100">
+          <form onSubmit={handleSendMessage} className="p-2 px-4 pb-16 bg-gray-100">
             <label htmlFor="chat" className="sr-only">
               Your message
             </label>

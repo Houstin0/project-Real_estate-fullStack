@@ -1,55 +1,79 @@
 import { useState } from "react";
-import "./slider.scss";
 
 function Slider({ images }) {
   const [imageIndex, setImageIndex] = useState(null);
 
   const changeSlide = (direction) => {
     if (direction === "left") {
-      if (imageIndex === 0) {
-        setImageIndex(images.length - 1);
-      } else {
-        setImageIndex(imageIndex - 1);
-      }
+      setImageIndex(imageIndex === 0 ? images.length - 1 : imageIndex - 1);
     } else {
-      if (imageIndex === images.length - 1) {
-        setImageIndex(0);
-      } else {
-        setImageIndex(imageIndex + 1);
-      }
+      setImageIndex(imageIndex === images.length - 1 ? 0 : imageIndex + 1);
     }
   };
 
   return (
-    <div className="slider">
+    <div className="w-full h-full flex gap-5">
+      {/* Full Screen Slider */}
       {imageIndex !== null && (
-        <div className="fullSlider">
-          <div className="arrow" onClick={() => changeSlide("left")}>
-            <img src="/arrow.png" alt="" />
+        <div className="fixed inset-0 bg-black z-50 flex justify-between items-center">
+          <div
+            className="flex-1 flex justify-center items-center"
+            onClick={() => changeSlide("left")}
+          >
+            <img
+              src="/arrow.png"
+              alt="left-arrow"
+              className="w-12 md:w-8 sm:w-6"
+            />
           </div>
-          <div className="imgContainer">
-            <img src={images[imageIndex]} alt="" />
+          <div className="flex-[10] flex justify-center items-center">
+            <img
+              src={images[imageIndex]}
+              alt="current-slide"
+              className="w-full h-full object-cover"
+            />
           </div>
-          <div className="arrow" onClick={() => changeSlide("right")}>
-            <img src="/arrow.png" className="right" alt="" />
+          <div
+            className="flex-1 flex justify-center items-center"
+            onClick={() => changeSlide("right")}
+          >
+            <img
+              src="/arrow.png"
+              alt="right-arrow"
+              className="w-12 md:w-8 sm:w-6 transform rotate-180"
+            />
           </div>
-          <div className="close" onClick={() => setImageIndex(null)}>
+          <div
+            className="absolute top-0 right-0 text-white text-4xl font-bold p-12 cursor-pointer"
+            onClick={() => setImageIndex(null)}
+          >
             X
           </div>
         </div>
       )}
-      <div className="bigImage">
-        <img src={images[0]} alt="" onClick={() => setImageIndex(0)} />
-      </div>
-      <div className="smallImages">
-        {images.slice(1).map((image, index) => (
+
+      <div className="grid gap-4">
+        {/* Main Image */}
+        <div>
           <img
-            src={image}
+            className="h-auto max-w-full object-cover rounded-lg cursor-pointer"
+            src={images[0]}
             alt=""
-            key={index}
-            onClick={() => setImageIndex(index + 1)}
+            onClick={() => setImageIndex(0)}
           />
-        ))}
+        </div>
+        {/* Thumbnail Images */}
+        <div className="grid grid-cols-5 gap-4">
+          {images.slice(1).map((image, index) => (
+            <img
+              src={image}
+              alt={`thumbnail-${index}`}
+              key={index}
+              className="h-auto max-w-full rounded-lg object-cover cursor-pointer"
+              onClick={() => setImageIndex(index + 1)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -31,26 +31,50 @@ export const getConversations = async (req, res) => {
   }
 };
 
-
-
-export const getMessages = async (req, res) => {
-  const { conversationId } = req.params;
+// Controller to get a single conversation based on the userId
+export const getConversation = async (req, res) => {
+  const tokenUserId = req.userId;  // Extract the logged-in user's ID
+  const { userId } = req.params;   // The ID of the other user in the conversation
+  
   try {
-    const messages = await prisma.message.findMany({
-      where: { conversationId },
-      orderBy: { createdAt: 'asc' },
+    // Find the conversation where the logged-in user is either user1 or user2 and the other user matches userId
+    const conversation = await prisma.conversation.findFirst({
+      where: {
+        OR: [
+          { user1Id: tokenUserId, user2Id: userId },
+          { user1Id: userId, user2Id: tokenUserId }
+        ],
+      },
       include: {
-        
-        sender: { select: { username: true } },          
-        receiver: { select: { username: true } },         
-       
-      }
+        user1: { select: { id: true, username: true, avatar: true } },
+        user2: { select: { id: true, username: true, avatar: true } },
+        messages: {
+          select: {
+            id: true,
+            senderId: true,
+            receiverId: true,
+            content: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+      },
     });
-    res.json(messages);
+
+    // Check if a conversation exists
+    if (!conversation) {
+      return res.status(404).json({ error: "Conversation not found" });
+    }
+
+    res.json(conversation);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Error fetching conversation" });
   }
 };
+
 
 
 

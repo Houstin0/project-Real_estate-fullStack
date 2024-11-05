@@ -22,8 +22,8 @@ export const profilePageLoader = async () => {
   });
 };
 
-export const inboxPageLoader = async () => {
-  const chatPromise = apiRequest("/chats");
+export const inboxPageLoader = async ({ params }) => {
+  const chatPromise = apiRequest("/chats/"+ params.id);
   return defer({
     chatResponse: chatPromise,
   });
