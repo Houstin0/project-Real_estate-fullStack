@@ -106,26 +106,28 @@ export const savePost = async (req, res) => {
     });
 
     if (savedPost) {
+      // If the post is already saved, delete it
       await prisma.savedPost.delete({
-        where: {
-          id: savedPost.id,
-        },
+        where: { id: savedPost.id },
       });
-      res.status(200).json({ message: "Post removed from saved list" });
+      res.status(200).json({ isSaved: false, message: "Post removed from favorites" });
     } else {
+      // If the post is not saved, create a saved post
       await prisma.savedPost.create({
         data: {
           userId: tokenUserId,
           postId,
         },
       });
-      res.status(200).json({ message: "Post saved" });
+      res.status(200).json({ isSaved: true, message: "Post added to favorites" });
     }
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Failed to delete users!" });
+    console.error(err);
+    res.status(500).json({ message: "Failed to toggle saved state" });
   }
 };
+
+
 
 export const profilePosts = async (req, res) => {
   const tokenUserId = req.userId;
@@ -167,5 +169,27 @@ export const getNotificationNumber = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to get profile posts!" });
+  }
+};
+
+
+
+// Get saved posts of a user by user ID
+export const getSavedPosts = async (req, res) => {
+  const userId = req.params.id; // Retrieve user ID from request parameters
+
+  try {
+    const savedPosts = await prisma.savedPost.findMany({
+      where: { userId },
+      include: {
+        post: true, // Include the related post details
+      },
+    });
+
+    const posts = savedPosts.map((item) => item.post); // Extract the posts
+    res.status(200).json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to fetch saved posts!" });
   }
 };

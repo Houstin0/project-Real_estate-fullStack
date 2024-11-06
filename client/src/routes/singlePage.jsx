@@ -2,34 +2,63 @@ import Slider from "../components/slider/Slider";
 import Map from "../components/Map";
 import { useNavigate, useLoaderData, Link } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect  } from "react";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
 
 function SinglePage() {
   const post = useLoaderData();
-  const [saved, setSaved] = useState(post.isSaved);
+  const [saved, setSaved] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSavedPosts = async () => {
+      if (!currentUser) return;
+
+      try {
+        const response = await apiRequest.get(`/users/savedPosts/${currentUser.id}`);
+        const savedPosts = response.data;
+
+        console.log(savedPosts) 
+        
+        // Check if the current post is in the saved posts list
+        const isPostSaved = savedPosts.some((savedPost) => savedPost.id === post.id);
+        setSaved(isPostSaved);
+      } catch (error) {
+        console.error("Error fetching saved posts:", error);
+      }
+    };
+
+    fetchSavedPosts();
+  }, [currentUser, post.id]);
 
   const handleSave = async () => {
     if (!currentUser) {
       navigate("/login");
+      return;
     }
+
+    // Toggle the saved state optimistically
     setSaved((prev) => !prev);
+
     try {
-      await apiRequest.post("/users/save", { postId: post.id });
+      const response = await apiRequest.post("/users/save", { postId: post.id });
+      console.log(response.data.message);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      // Revert the save state if request fails
       setSaved((prev) => !prev);
     }
   };
 
-  console.log (post)
+
+
+  // console.log (currentUser)
 
 
   return (
-    <section className="relative py-4 md:py-8 bg-gradient-to-r from-white to-[#F5EFFF] via-white dark:from-black dark:to-black antialiased overflow-y-auto h-screen">
+    <section className="relative py-4 md:py-8 bg-gradient-to-l from-white to-[#F5EFFF] dark:from-black dark:to-black antialiased overflow-y-auto h-screen">
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0 ">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
           <div className="shrink-0 max-w-md lg:max-w-lg mx-auto mb-8">
@@ -60,14 +89,15 @@ function SinglePage() {
             </div>
 
             <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-2">
-              <a
-                href="#"
+            <a
+                onClick={handleSave}
                 title=""
-                className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                className={`flex items-center justify-center py-1 px-5 text-sm font-medium text-black focus:outline-none bg-white rounded-lg border border-[#A594F9] 
+                  ${saved ? "bg-[#A594F9] text-primary-700 dark:text-black" : "hover:bg-[#A594F9] dark:hover:text-black"}`}
                 role="button"
               >
                 <svg
-                  className="w-5 h-5 -ms-2 me-2"
+                  className="w-8 h-8 -ms-2 me-2"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -76,40 +106,25 @@ function SinglePage() {
                   viewBox="0 0 24 24"
                 >
                   <path
+                  fill={saved ? "red" : "none"}
                     stroke="currentColor"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth="2"
+                    strokeWidth="1"
                     d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
                   />
                 </svg>
-                Add to favorites
+                {saved ? "Remove from favorites  " : "Add to favorites"}
               </a>
 
               <a
                 href="#"
                 title=""
-                className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center"
+                className="flex items-center justify-center pr-4 text-sm font-medium text-black focus:outline-none bg-white rounded-lg border border-[#A594F9] hover:bg-[#A594F9] hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:hover:text-black dark:hover:bg-[#A594F9]"
                 role="button"
               >
-                <svg
-                  className="w-5 h-5 -ms-2 me-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
-                  />
-                </svg>
-                Add to cart
+               <img className="w-10 h-10 rounded-l-lg mr-2" src="get-house.gif" alt="" />
+                {post.type === "rent" ? "Rent" : "Buy"}
               </a>
             </div>
 
@@ -181,7 +196,7 @@ function SinglePage() {
           </div>
 
           {/* User Info Section */}
-          <div className="my-10 w-full md:max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:mt-0 mt-auto">
+          <div className="my-10 ml-10 w-full md:max-w-xs bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:mt-0 mt-auto">
             <div className="flex flex-col items-center py-8">
               <img
                 className="w-24 h-24 mb-3 rounded-full shadow-lg object-cover"
@@ -196,7 +211,7 @@ function SinglePage() {
               </span>
               <div className="flex mt-4 md:mt-6">
                 < Link
-                  to={`/${post.userId}`}
+                  to={`/inbox/${post.userId}`}
                   className="py-2 px-4 text-sm font-medium text-gray-900 bg-blue-400 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 >
                   Message Landlord

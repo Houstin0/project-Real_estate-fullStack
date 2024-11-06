@@ -73,7 +73,7 @@ function App() {
           element: <NewPostPage />,
         },
         {
-          path: "/inbox",
+          path: "/inbox/:id",
           element: <Inbox />,
           loader: inboxPageLoader
         },
