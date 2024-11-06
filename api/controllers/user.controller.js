@@ -119,7 +119,7 @@ export const savePost = async (req, res) => {
           postId,
         },
       });
-      res.status(200).json({ isSaved: true, message: "Post added to favorites" });
+      res.status(200).json({  message: "Post added to favorites" });
     }
   } catch (err) {
     console.error(err);

@@ -65,7 +65,7 @@ function SearchBar() {
           <input
             type="number"
             name="maxPrice"
-            className="block w-1/3 p-4 text-base text-black border border-[#A594F9] bg-white dark:bg-black placeholder-gray-500 dark:placeholder-white"
+            className="block w-1/3 p-4 text-base text-black bg-white dark:bg-black placeholder-gray-500 dark:placeholder-white"
             min={1}
             max={10000000}
             placeholder="Max Price"

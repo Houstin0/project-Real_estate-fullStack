@@ -2,28 +2,28 @@ import Slider from "../components/slider/Slider";
 import Map from "../components/Map";
 import { useNavigate, useLoaderData, Link } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { useContext, useState, useEffect  } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import apiRequest from "../lib/apiRequest";
 
 function SinglePage() {
   const post = useLoaderData();
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState(sessionStorage.getItem(`saved-${post.id}`) || false);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSavedPosts = async () => {
-      if (!currentUser) return;
-
       try {
-        const response = await apiRequest.get(`/users/savedPosts/${currentUser.id}`);
+        const response = await apiRequest.get(
+          `/users/savedPosts/${currentUser.id}`
+        );
         const savedPosts = response.data;
 
-        console.log(savedPosts) 
-        
         // Check if the current post is in the saved posts list
-        const isPostSaved = savedPosts.some((savedPost) => savedPost.id === post.id);
+        const isPostSaved = savedPosts.some(
+          (savedPost) => savedPost.id === post.id
+        );
         setSaved(isPostSaved);
       } catch (error) {
         console.error("Error fetching saved posts:", error);
@@ -32,6 +32,12 @@ function SinglePage() {
 
     fetchSavedPosts();
   }, [currentUser, post.id]);
+
+  useEffect(() => {
+    // Update session storage whenever the saved state changes
+    sessionStorage.setItem(`saved-${post.id}`, saved.toString());
+    console.log(sessionStorage.getItem(`saved-${post.id}`))
+  }, [saved, post.id]);
 
   const handleSave = async () => {
     if (!currentUser) {
@@ -43,7 +49,9 @@ function SinglePage() {
     setSaved((prev) => !prev);
 
     try {
-      const response = await apiRequest.post("/users/save", { postId: post.id });
+      const response = await apiRequest.post("/users/save", {
+        postId: post.id,
+      });
       console.log(response.data.message);
     } catch (err) {
       console.error(err);
@@ -52,10 +60,21 @@ function SinglePage() {
     }
   };
 
+  const handleRentOrBuyClick = () => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
 
+    // Format the default message with the post title and link
+    const action = post.type === "rent" ? "rent" : "buy";
+    const defaultMessage = `Hello, I would like to ${action} the property "<a href="/${post.id}">${post.title}</a>" listed on your website.`;
+
+    // Navigate to the landlord's message page with the default message
+    navigate(`/inbox/${post.userId}`, { state: { defaultMessage } });
+  };
 
   // console.log (currentUser)
-
 
   return (
     <section className="relative py-4 md:py-8 bg-gradient-to-l from-white to-[#F5EFFF] dark:from-black dark:to-black antialiased overflow-y-auto h-screen">
@@ -89,11 +108,15 @@ function SinglePage() {
             </div>
 
             <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-2">
-            <a
+              <a
                 onClick={handleSave}
                 title=""
                 className={`flex items-center justify-center py-1 px-5 text-sm font-medium text-black focus:outline-none bg-white rounded-lg border border-[#A594F9] 
-                  ${saved ? "bg-[#A594F9] text-primary-700 dark:text-black" : "hover:bg-[#A594F9] dark:hover:text-black"}`}
+                  ${
+                    saved
+                      ? "bg-[#A594F9] text-primary-700 dark:text-black"
+                      : "hover:bg-[#A594F9] dark:hover:text-black"
+                  }`}
                 role="button"
               >
                 <svg
@@ -106,7 +129,7 @@ function SinglePage() {
                   viewBox="0 0 24 24"
                 >
                   <path
-                  fill={saved ? "red" : "none"}
+                    fill={currentUser && saved ? "red" : "white"}
                     stroke="currentColor"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -118,12 +141,15 @@ function SinglePage() {
               </a>
 
               <a
-                href="#"
-                title=""
+                onClick={handleRentOrBuyClick}
                 className="flex items-center justify-center pr-4 text-sm font-medium text-black focus:outline-none bg-white rounded-lg border border-[#A594F9] hover:bg-[#A594F9] hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:hover:text-black dark:hover:bg-[#A594F9]"
                 role="button"
               >
-               <img className="w-10 h-10 rounded-l-lg mr-2" src="get-house.gif" alt="" />
+                <img
+                  className="w-10 h-10 rounded-l-lg mr-2"
+                  src="get-house.gif"
+                  alt=""
+                />
                 {post.type === "rent" ? "Rent" : "Buy"}
               </a>
             </div>
@@ -210,7 +236,7 @@ function SinglePage() {
                 Landlord
               </span>
               <div className="flex mt-4 md:mt-6">
-                < Link
+                <Link
                   to={`/inbox/${post.userId}`}
                   className="py-2 px-4 text-sm font-medium text-gray-900 bg-blue-400 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 >
