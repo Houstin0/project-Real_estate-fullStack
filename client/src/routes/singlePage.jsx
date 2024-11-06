@@ -1,4 +1,4 @@
-import Slider from "../components/slider/Slider";
+import Slider from "../components/Slider";
 import Map from "../components/Map";
 import { useNavigate, useLoaderData, Link } from "react-router-dom";
 import DOMPurify from "dompurify";

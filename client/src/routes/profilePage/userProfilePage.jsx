@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function UserProfilePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [location, setLocation] = useState("Fetching location...");
+  const [conversations, setConversations] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
 
   useEffect(() => {
     const fetchLocationName = async (latitude, longitude) => {
@@ -15,7 +17,7 @@ function UserProfilePage() {
         const response = await axios.get(
           `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
         );
-        console.log(response.data)
+        console.log(response.data);
         const locationName = response.data?.display_name;
         setLocation(locationName || "Location not found.");
       } catch (error) {
@@ -51,9 +53,44 @@ function UserProfilePage() {
     }
   };
 
+  // Fetch conversations for the logged-in user
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const response = await apiRequest.get("/chats");
+        setConversations(response.data);
+      } catch (err) {
+        console.error("Error fetching conversations:", err);
+      }
+    };
+
+    if (currentUser) {
+      fetchConversations();
+    }
+  }, [currentUser]);
+  // console.log(conversations)
+
+  // Fetch saved posts for the logged-in user
+  useEffect(() => {
+    const fetchSavedPosts = async () => {
+      try {
+        const response = await apiRequest.get(
+          `/users/savedPosts/${currentUser.id}`
+        );
+        setSavedPosts(response.data);
+      } catch (err) {
+        console.error("Error fetching saved posts:", err);
+      }
+    };
+
+    if (currentUser) {
+      fetchSavedPosts();
+    }
+  }, [currentUser]);
+
   return (
     <section className="fixed w-full h-full overflow-y-auto bg-white py-8 antialiased dark:bg-black md:py-0">
-      <div className="mx-auto max-w-screen-lg px-4 2xl:px-0">
+      <div className="mx-auto max-w-screen-lg px-4">
         <h2 className="flex items-center justify-center mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl md:mb-6">
           Profile overview
         </h2>
@@ -95,9 +132,7 @@ function UserProfilePage() {
                 <dt className="font-semibold text-gray-900 dark:text-white">
                   Location
                 </dt>
-                <dd className="text-gray-500 dark:text-gray-400">
-                  {location}
-                </dd>
+                <dd className="text-gray-500 dark:text-gray-400">{location}</dd>
               </dl>
             </div>
           </div>
@@ -130,6 +165,94 @@ function UserProfilePage() {
           >
             Sign Out
           </button>
+
+          <div className="flex flex-col lg:flex-row gap-8 mt-6">
+            {/* Conversations section */}
+            <div className="flex-1 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <h5 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Conversations
+              </h5>
+              <ul
+                role="list"
+                className="divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                {conversations.length > 0 ? (
+                  conversations.map((conversation) => {
+                    const friend =
+                      conversation.user1.id === currentUser.id
+                        ? conversation.user2
+                        : conversation.user1;
+                    return (
+                      <li key={conversation.id} className="py-3 sm:py-1">
+                         <Link to={`/inbox/${friend.id}`}>
+                        <div className="flex items-center">
+                          <img
+                            className="object-cover w-14 h-14 rounded-full"
+                            src={friend.avatar || "/noavatar.jpg"}
+                            alt={friend.username}
+                          />
+                          <p className="text-lg font-semibold text-gray-900 truncate dark:text-white ms-4">
+                            {friend.username}
+                          </p>
+                        </div>
+                        </Link>
+                      </li>
+                    );
+                  })
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">
+                    No conversations found.
+                  </p>
+                )}
+              </ul>
+            </div>
+
+            {/* Saved Posts Section */}
+            <div className="flex-1 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <h5 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Saved Posts
+              </h5>
+              <ul
+                role="list"
+                className="divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                {savedPosts.length > 0 ? (
+                  savedPosts.map((post) => (
+                    
+                    <li key={post.id} className="py-3 sm:py-1">
+                      <Link to={`/${post.id}`}>
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                          <img
+                            className="w-14 h-14 rounded-lg"
+                            src={post.images[0] || "/noimage.jpg"}
+                            alt={post.title}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0 ms-4">
+                          <p className="text-lg font-medium text-gray-900 truncate dark:text-white">
+                            {post.title}
+                          </p>
+                          <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+                            {post.address}
+                          </p>
+                        </div>
+                        <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                          Ksh. {post.price}
+                        </div>
+                      </div>
+                      </Link>
+                    </li>
+                    
+                  ))
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">
+                    No saved posts found.
+                  </p>
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
