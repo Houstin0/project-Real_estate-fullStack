@@ -2,8 +2,8 @@ import axios from "axios";
 
 // Create an Axios instance
 const apiRequest = axios.create({
-  baseURL: "http://localhost:8800/api",
-  // baseURL: "https://keja-backendapi.onrender.com/api",
+  // baseURL: "http://localhost:8800/api",
+  baseURL: "https://keja-backendapi.onrender.com/api",
   withCredentials: true, // If you need to send cookies with requests
 });
 
