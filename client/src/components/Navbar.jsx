@@ -130,6 +130,7 @@ function Navbar() {
     <nav className="bg-white border-gray-200 dark:bg-black relative z-50 px-4">
       <div className="w-full flex flex-wrap items-center justify-between p-1 px-2">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <img className="h-10 w-10" src="/logo.png" alt=""/>
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             House Hunt
           </span>
